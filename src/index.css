@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .container-wraper {
+        @apply flex items-center justify-center px-20 py-6;
+    }
+
+    .wraper {
+        @apply max-w-1080 w-full;
+    }
+}
