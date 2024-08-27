@@ -1,6 +1,6 @@
-import ProgramTable from "../components/ProgramTable";
-import ProgramProgress from "../components/ProgramProgress";
-import ProgramContent from "../components/ProgramContent";
+import ProgramTable from "../components/Program/Table";
+import ProgramProgress from "../components/Program/Progress";
+import ProgramContent from "../components/Program/Content";
 
 export default function ProgramDetail() {
   return (

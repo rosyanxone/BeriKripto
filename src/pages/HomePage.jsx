@@ -1,4 +1,4 @@
-import ProgramCard from "../components/ProgramCard";
+import ProgramCard from "../components/Program/Card";
 
 export default function HomePage() {
   return (
