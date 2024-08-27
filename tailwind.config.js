@@ -12,6 +12,8 @@ export default {
       },
       colors: {
         primary: "#0079FF",
+        dark: "#303F50",
+        light: "#EAECF0",
       },
       width: {
         86: "360px",

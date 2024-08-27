@@ -2,7 +2,7 @@ export default function ProgramCard() {
   return (
     <div className="flex w-[402px] flex-col gap-4 rounded-2xl border-2 border-slate-200 bg-slate-100">
       <div className="relative">
-        <span className="absolute left-5 top-5 rounded-lg bg-slate-800 bg-opacity-70 p-2.5 text-sm font-semibold text-white">
+        <span className="absolute left-5 top-5 rounded-lg bg-slate-500 bg-opacity-50 p-2.5 text-sm font-semibold text-white">
           by 0x123...456
         </span>
         <img
@@ -28,9 +28,9 @@ export default function ProgramCard() {
           <b>25 ETH</b>
         </div>
         <div className="flex items-center gap-4">
-          <div className="h-2 w-full rounded-md bg-neutral-300">
+          <div className="h-2 w-full rounded-md bg-light">
             <div
-              className="h-2 rounded-md bg-violet-500"
+              className="h-2 rounded-full bg-violet-500"
               style={{ width: "45%" }}
             ></div>
           </div>
@@ -39,8 +39,8 @@ export default function ProgramCard() {
       </div>
       <div className="my-6 flex justify-center">
         <a
-          href="#"
-          className="font-lexend-deca font-semibold text-slate-500 hover:text-primary"
+          href="/detail"
+          className="font-lexend-deca font-semibold text-primary hover:text-slate-500"
         >
           Detail Program
         </a>

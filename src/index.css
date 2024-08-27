@@ -2,12 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-    .container-wraper {
-        @apply flex items-center justify-center px-20 py-6;
-    }
+@layer components {
+  table.donors th {
+    @apply p-2 text-start font-lexend-deca text-sm font-medium;
+  }
 
-    .wraper {
-        @apply max-w-1080 w-full;
-    }
+  table.donors td {
+    @apply p-2;
+  }
+}
+
+@layer utilities {
+  .container-wraper {
+    @apply flex items-center justify-center px-20 py-6;
+  }
+
+  .wraper {
+    @apply w-full max-w-1080;
+  }
 }
