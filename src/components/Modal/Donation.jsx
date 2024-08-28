@@ -1,11 +1,12 @@
-export default function Donation({ setIsModal }) {
+export default function Donation({ setOpenDonationModal }) {
   return (
-    <div className="flex h-full items-center justify-center">
+    <section className="absolute bottom-0 top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-300 bg-opacity-80">
       <div className="rounded-2xl bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-semibold text-slate-800">Donasi</h1>
           <button
-            onClick={() => setIsModal(false)}
+            type="click"
+            onClick={() => setOpenDonationModal(false)}
             className="flex h-full items-center justify-center rounded-lg bg-slate-800 p-3"
           >
             <svg
@@ -40,11 +41,14 @@ export default function Donation({ setIsModal }) {
               id="message"
             ></textarea>
           </label>
-          <button className="rounded-md bg-dark p-2 font-lexend-deca text-xl font-semibold text-white">
+          <button
+            type="submit"
+            className="rounded-md bg-dark p-2 font-lexend-deca text-xl font-semibold text-white"
+          >
             Kirim
           </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 }

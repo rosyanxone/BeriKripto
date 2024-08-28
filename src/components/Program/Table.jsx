@@ -1,7 +1,7 @@
-import donors from "../../utils/data";
+import donors from "./../../utils/data";
 import { shortingAddress, convertUnixTimestamp } from "../../utils/index";
 
-export default function ProgramTable() {
+export default function ProgramTable({ setOpenDonorsModal }) {
   return (
     <div className="mb-8 flex justify-evenly gap-8">
       <div className="w-full">
@@ -46,7 +46,14 @@ export default function ProgramTable() {
       </div>
       <div className="w-full">
         <div className="mb-4 flex items-center justify-end">
-          <button className="rounded-lg bg-neutral-200 px-3 py-2 font-semibold">
+          <button
+            type="click"
+            onClick={() => {
+              setOpenDonorsModal(true);
+              globalThis.scrollTo({ top: 0 });
+            }}
+            className="rounded-lg bg-neutral-200 px-3 py-2 font-semibold"
+          >
             Lihat Semua
           </button>
         </div>

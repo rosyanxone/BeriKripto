@@ -1,4 +1,4 @@
-export default function ProgramContent({ setIsModal }) {
+export default function ProgramContent({ setOpenDonationModal }) {
   return (
     <div className="flex h-[490px] max-h-[490px] gap-5">
       <img
@@ -49,7 +49,10 @@ export default function ProgramContent({ setIsModal }) {
           </div>
         </div>
         <button
-          onClick={() => setIsModal(true)}
+          onClick={() => {
+            setOpenDonationModal(true);
+            globalThis.scrollTo({ top: 0 });
+          }}
           className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
         >
           Donasi Sekarang

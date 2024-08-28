@@ -1,8 +1,24 @@
 import ProgramTable from "../components/Program/Table";
 import ProgramProgress from "../components/Program/Progress";
 import ProgramContent from "../components/Program/Content";
+import DonationModal from "../components/Modal/Donation";
+import DonorsModal from "../components/Modal/Donors";
+
+import { useEffect, useState } from "react";
 
 export default function ProgramDetail({ setIsModal }) {
+  const [openDonationModal, setOpenDonationModal] = useState(false);
+  const [openDonorsModal, setOpenDonorsModal] = useState(false);
+
+  useEffect(() => {
+    const body = document.body;
+    body.style.overflow = "unset";
+
+    if (openDonationModal || openDonorsModal) {
+      body.style.overflow = "hidden";
+    }
+  }, [openDonationModal, openDonorsModal]);
+
   return (
     <section className="container-wraper">
       <div className="wraper flex flex-col gap-5">
@@ -24,11 +40,19 @@ export default function ProgramDetail({ setIsModal }) {
               </svg>
             </a>
           </div>
-          <ProgramContent setIsModal={setIsModal} />
+          <ProgramContent setOpenDonationModal={setOpenDonationModal} />
         </div>
         <ProgramProgress />
-        <ProgramTable />
+        <ProgramTable setOpenDonorsModal={setOpenDonorsModal} />
       </div>
+      {openDonationModal && (
+        <DonationModal setOpenDonationModal={setOpenDonationModal} />
+      )}
+      {
+        openDonorsModal && (
+          <DonorsModal setOpenDonorsModal={setOpenDonorsModal} />
+        )
+      }
     </section>
   );
 }
