@@ -1,3 +1,6 @@
+import donors from "../../utils/data";
+import { shortingAddress, convertUnixTimestamp } from "../../utils/index";
+
 export default function ProgramTable() {
   return (
     <div className="mb-8 flex justify-evenly gap-8">
@@ -26,41 +29,18 @@ export default function ProgramTable() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
+            {donors.slice(0, 5).map((donor, i) => (
+              <tr key={i}>
+                <td>{++i}</td>
+                <td>{shortingAddress(donor.address)}</td>
+                <td>{convertUnixTimestamp(donor.timestamp)}</td>
+                <td>{donor.donation} ETH</td>
+                <td>
+                  {donor.message.substring(0, 22)}
+                  {donor.message.length > 22 && "..."}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -81,41 +61,18 @@ export default function ProgramTable() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td className="font-medium">0xa715...c0fe</td>
-              <td>5 jam lalu</td>
-              <td>2 ETH</td>
-              <td>Cepat Sembuh</td>
-            </tr>
+            {donors.slice(5, 10).map((donor, i) => (
+              <tr key={i}>
+                <td>{6 + i}</td>
+                <td>{shortingAddress(donor.address)}</td>
+                <td>{convertUnixTimestamp(donor.timestamp)}</td>
+                <td>{donor.donation} ETH</td>
+                <td>
+                  {donor.message.substring(0, 22)}
+                  {donor.message.length > 22 && "..."}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

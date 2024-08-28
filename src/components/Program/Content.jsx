@@ -1,4 +1,4 @@
-export default function ProgramContent() {
+export default function ProgramContent({ setIsModal }) {
   return (
     <div className="flex h-[490px] max-h-[490px] gap-5">
       <img
@@ -35,7 +35,7 @@ export default function ProgramContent() {
               src="./thumb/frame-308-4x4.png"
               alt="Avatar Image"
             />
-            <p className="text-lg font-medium">0x0E9F2A....762E95</p>
+            <p className="text-lg font-medium">0X0E...2E95</p>
           </div>
         </div>
         <div className="flex gap-1">
@@ -48,7 +48,10 @@ export default function ProgramContent() {
             <p className="text-sm">30 Juli 2024</p>
           </div>
         </div>
-        <button className="rounded-lg bg-dark p-6 text-xl font-semibold text-white">
+        <button
+          onClick={() => setIsModal(true)}
+          className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+        >
           Donasi Sekarang
         </button>
       </div>

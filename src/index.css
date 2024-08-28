@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html,
+  body {
+    @apply h-full;
+  }
+}
+
 @layer components {
   table.donors th {
     @apply p-2 text-start font-lexend-deca text-sm font-medium;

@@ -2,7 +2,7 @@ import ProgramTable from "../components/Program/Table";
 import ProgramProgress from "../components/Program/Progress";
 import ProgramContent from "../components/Program/Content";
 
-export default function ProgramDetail() {
+export default function ProgramDetail({ setIsModal }) {
   return (
     <section className="container-wraper">
       <div className="wraper flex flex-col gap-5">
@@ -24,7 +24,7 @@ export default function ProgramDetail() {
               </svg>
             </a>
           </div>
-          <ProgramContent />
+          <ProgramContent setIsModal={setIsModal} />
         </div>
         <ProgramProgress />
         <ProgramTable />

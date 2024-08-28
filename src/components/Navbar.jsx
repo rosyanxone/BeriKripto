@@ -1,6 +1,6 @@
 export default function Navbar() {
   return (
-    <nav className="container-wraper sticky top-0 z-50 border-b-2 border-slate-300 bg-white">
+    <nav className="container-wraper sticky top-0 z-20 border-b-2 border-slate-300 bg-white">
       <div className="wraper flex items-center justify-between">
         <a href="/" className="fontle text-3xl font-semibold text-primary">
           BeriKripto
