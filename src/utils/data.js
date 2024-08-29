@@ -65,6 +65,12 @@ const donors = [
     donation: 1.4,
     message: "Yang ini engga",
   },
+  {
+    address: "0x406614687e18E587230942dD49827bb45a5f8BE0",
+    timestamp: 1724808609,
+    donation: 1.4,
+    message: "Yang ini engga",
+  },
 ];
 
 // Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus esse laboriosam optio expedita odit veniam numquam illo ad impedit hic accusantium quae dolorem iste architecto harum, consectetur sit praesentium odio recusandae, corrupti modi. Illo, optio ducimus vero neque vel nisi maiores molestias in deserunt magni repellendus placeat eos id facere?

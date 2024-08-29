@@ -1,11 +1,9 @@
 import donorsData from "./../../utils/data";
 import { shortingAddress, convertUnixTimestamp } from "../../utils/index";
 
-export default function Donors({ setOpenDonorsModal  }) {
+export default function Donors({ setOpenDonorsModal }) {
   return (
-    <section
-      className="absolute bottom-0 top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-300 bg-opacity-80"
-    >
+    <section className="absolute bottom-0 top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-300 bg-opacity-80">
       <div className="rounded-2xl bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-semibold text-slate-800">Donasi</h1>
@@ -22,31 +20,34 @@ export default function Donors({ setOpenDonorsModal  }) {
             </svg>
           </button>
         </div>
-        <table className="donors w-full">
-          <thead className="border-b border-black">
-            <tr>
-              <th>No</th>
-              <th>Donatur</th>
-              <th>Waktu</th>
-              <th>Donasi</th>
-              <th>Pesan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {donorsData.map((donor, i) => (
-              <tr key={i}>
-                <td>{++i}</td>
-                <td>{shortingAddress(donor.address)}</td>
-                <td>{convertUnixTimestamp(donor.timestamp)}</td>
-                <td>{donor.donation} ETH</td>
-                <td>
-                  {donor.message.substring(0, 22)}
-                  {donor.message.length > 22 && "..."}
-                </td>
+        <div className="relative h-[445px] overflow-y-scroll">
+          <table className="donors w-full">
+            <thead className="border-b border-black">
+              <tr>
+                <th>No</th>
+                <th>Donatur</th>
+                <th>Waktu</th>
+                <th>Donasi</th>
+                <th>Pesan</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {donorsData.map((donor, i) => (
+                <tr key={i}>
+                  <td>{++i}</td>
+                  <td>{shortingAddress(donor.address)}</td>
+                  <td>{convertUnixTimestamp(donor.timestamp)}</td>
+                  <td>{donor.donation} ETH</td>
+                  <td>
+                    {donor.message.substring(0, 22)}
+                    {donor.message.length > 22 && "..."}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="sticky bottom-0 h-12 w-full bg-white bg-opacity-60"></div>
+        </div>
       </div>
     </section>
   );
