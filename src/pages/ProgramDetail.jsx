@@ -48,11 +48,9 @@ export default function ProgramDetail({ setIsModal }) {
       {openDonationModal && (
         <DonationModal setOpenDonationModal={setOpenDonationModal} />
       )}
-      {
-        openDonorsModal && (
-          <DonorsModal setOpenDonorsModal={setOpenDonorsModal} />
-        )
-      }
+      {openDonorsModal && (
+        <DonorsModal setOpenDonorsModal={setOpenDonorsModal} />
+      )}
     </section>
   );
 }
