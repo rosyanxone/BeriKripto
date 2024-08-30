@@ -3,21 +3,23 @@ import ProgramProgress from "../components/Program/Progress";
 import ProgramContent from "../components/Program/Content";
 import DonationModal from "../components/Modal/Donation";
 import DonorsModal from "../components/Modal/Donors";
+import ReportModal from "../components/Modal/Report";
 
 import { useEffect, useState } from "react";
 
 export default function ProgramDetail({ setIsModal }) {
   const [openDonationModal, setOpenDonationModal] = useState(false);
   const [openDonorsModal, setOpenDonorsModal] = useState(false);
+  const [openReportModal, setOpenReportModal] = useState(false);
 
   useEffect(() => {
     const body = document.body;
     body.style.overflow = "unset";
 
-    if (openDonationModal || openDonorsModal) {
+    if (openDonationModal || openDonorsModal || openReportModal) {
       body.style.overflow = "hidden";
     }
-  }, [openDonationModal, openDonorsModal]);
+  }, [openDonationModal, openDonorsModal, openReportModal]);
 
   return (
     <section className="container-wraper">
@@ -50,6 +52,9 @@ export default function ProgramDetail({ setIsModal }) {
       )}
       {openDonorsModal && (
         <DonorsModal setOpenDonorsModal={setOpenDonorsModal} />
+      )}
+      {openReportModal && (
+        <ReportModal setOpenReportModal={setOpenReportModal} />
       )}
     </section>
   );
