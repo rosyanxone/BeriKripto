@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import TimeAgo from "javascript-time-ago";
 import id from "javascript-time-ago/locale/id";
 
@@ -52,12 +53,26 @@ const customLabels = {
   },
 };
 
-function shortingAddress(address) {
+function getShorterAddress(address) {
   return (
     address.substring(0, 4) +
     "..." +
     address.substring(address.length - 4, address.length)
   ).toUpperCase();
+}
+
+function getFormattedEther(val) {
+  let res = ethers.formatEther(String(val));
+  res = Math.round(res * 1e2) / 1e2;
+
+  return res;
+}
+
+function getTargetPercentage(amount, target) {
+  let percentage = parseInt((String(amount) / String(target)) * 100);
+  percentage = percentage > 100 ? 100 : percentage;
+
+  return percentage;
 }
 
 function convertUnixTimestamp(unix) {
@@ -74,4 +89,9 @@ function convertUnixTimestamp(unix) {
   return timeAgo.format(new Date(unix * 1000), customStyle);
 }
 
-export { shortingAddress, convertUnixTimestamp };
+export {
+  getShorterAddress,
+  getFormattedEther,
+  getTargetPercentage,
+  convertUnixTimestamp,
+};

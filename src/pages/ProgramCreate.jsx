@@ -12,7 +12,7 @@ export default function ProgramCreate() {
           <div
             className="relative h-full rounded-md bg-red-500 bg-cover bg-center"
             style={{
-              backgroundImage: 'url("./thumb/frame-308.png")',
+              backgroundImage: 'url("/thumb/frame-308.png")',
             }}
           >
             <button

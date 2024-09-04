@@ -20,7 +20,7 @@ export default function Report({ setOpenReportModal }) {
         {false && (
           <div className="flex gap-4">
             <img
-              src="./thumb/frame-308 (2).png"
+              src="/thumb/frame-308 (2).png"
               className="w-[60%] rounded-xl object-cover"
               alt="Report Image"
             />
@@ -58,7 +58,7 @@ export default function Report({ setOpenReportModal }) {
               <div
                 className="relative h-full rounded-md bg-red-500 bg-cover bg-center"
                 style={{
-                  backgroundImage: 'url("./thumb/frame-308.png")',
+                  backgroundImage: 'url("/thumb/frame-308.png")',
                 }}
               >
                 <button

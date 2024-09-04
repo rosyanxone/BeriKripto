@@ -1,5 +1,5 @@
 import donors from "./../../utils/data";
-import { shortingAddress, convertUnixTimestamp } from "../../utils/index";
+import { getShorterAddress, convertUnixTimestamp } from "../../utils/index";
 
 export default function ProgramTable({ setOpenDonorsModal }) {
   return (
@@ -32,7 +32,7 @@ export default function ProgramTable({ setOpenDonorsModal }) {
             {donors.slice(0, 5).map((donor, i) => (
               <tr key={i}>
                 <td>{++i}</td>
-                <td>{shortingAddress(donor.address)}</td>
+                <td>{getShorterAddress(donor.address)}</td>
                 <td>{convertUnixTimestamp(donor.timestamp)}</td>
                 <td>{donor.donation} ETH</td>
                 <td>
@@ -71,7 +71,7 @@ export default function ProgramTable({ setOpenDonorsModal }) {
             {donors.slice(5, 10).map((donor, i) => (
               <tr key={i}>
                 <td>{6 + i}</td>
-                <td>{shortingAddress(donor.address)}</td>
+                <td>{getShorterAddress(donor.address)}</td>
                 <td>{convertUnixTimestamp(donor.timestamp)}</td>
                 <td>{donor.donation} ETH</td>
                 <td>

@@ -1,5 +1,5 @@
 import donorsData from "./../../utils/data";
-import { shortingAddress, convertUnixTimestamp } from "../../utils/index";
+import { getShorterAddress, convertUnixTimestamp } from "../../utils/index";
 
 export default function Donors({ setOpenDonorsModal }) {
   return (
@@ -35,7 +35,7 @@ export default function Donors({ setOpenDonorsModal }) {
               {donorsData.map((donor, i) => (
                 <tr key={i}>
                   <td>{++i}</td>
-                  <td>{shortingAddress(donor.address)}</td>
+                  <td>{getShorterAddress(donor.address)}</td>
                   <td>{convertUnixTimestamp(donor.timestamp)}</td>
                   <td>{donor.donation} ETH</td>
                   <td>

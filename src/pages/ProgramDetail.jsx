@@ -6,8 +6,11 @@ import DonorsModal from "../components/Modal/Donors";
 import ReportModal from "../components/Modal/Report";
 
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-export default function ProgramDetail({ setIsModal }) {
+export default function ProgramDetail() {
+  const { id } = useParams();
+
   const [openDonationModal, setOpenDonationModal] = useState(false);
   const [openDonorsModal, setOpenDonorsModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);

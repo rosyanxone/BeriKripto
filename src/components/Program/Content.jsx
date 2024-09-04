@@ -3,7 +3,7 @@ export default function ProgramContent({ setOpenDonationModal }) {
     <div className="flex h-[490px] max-h-[490px] gap-5">
       <img
         className="w-[70%] rounded-2xl object-cover"
-        src="./thumb/frame-308.png"
+        src="/thumb/frame-308.png"
         alt="Header Image"
       />
       <div className="flex w-[30%] flex-col justify-between">
@@ -32,7 +32,7 @@ export default function ProgramContent({ setOpenDonationModal }) {
           <div className="flex items-center gap-2">
             <img
               className="h-8 rounded-full object-contain"
-              src="./thumb/frame-308-4x4.png"
+              src="/thumb/frame-308-4x4.png"
               alt="Avatar Image"
             />
             <p className="text-lg font-medium">0X0E...2E95</p>
