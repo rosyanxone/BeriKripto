@@ -1,35 +1,19 @@
-import { readContract } from "thirdweb";
 import { useEffect, useState } from "react";
 
 import ProgramCard from "../components/Program/Card";
-import { contract } from "../App";
-
-const getPrograms = async () => {
-  const data = await readContract({
-    contract,
-    method:
-      "function getPrograms() view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, address[] donators, uint256[] donations, string[] messages, bool isFinish)[])",
-    params: [],
-  });
-
-  return data;
-};
+import { useStateContext } from "../context";
 
 export default function HomePage() {
   const [totalPrograms, setTotalPrograms] = useState(0);
-  const [programs, setPrograms] = useState([]);
 
-  const fetchContract = async () => {
-    const data = await getPrograms();
-    setTotalPrograms(data.length);
-    setPrograms(data);
-
-    console.log(data);
-  };
+  const { getPrograms } = useStateContext();
+  const { programs, isLoading } = getPrograms();
 
   useEffect(() => {
-    fetchContract();
-  }, []);
+    if (!isLoading) {
+      setTotalPrograms(programs.length);
+    }
+  }, [programs]);
 
   return (
     <section className="container-wraper" id="programs">
@@ -37,9 +21,11 @@ export default function HomePage() {
         <div className="">
           <p className="text-xl font-medium">Semua Program ({totalPrograms})</p>
           <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
-            {programs.map((program, i) => (
-              <ProgramCard key={i} {...program} id={i} />
-            ))}
+            {!isLoading
+              ? programs.map((program, i) => (
+                  <ProgramCard key={i} {...program} id={i} />
+                ))
+              : "Loading..."}
           </div>
         </div>
         {/* <div className="">
