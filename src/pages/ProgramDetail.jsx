@@ -1,5 +1,4 @@
 import ProgramTable from "../components/Program/Table";
-import ProgramProgress from "../components/Program/Progress";
 import ProgramContent from "../components/Program/Content";
 import DonationModal from "../components/Modal/Donation";
 import DonorsModal from "../components/Modal/Donors";
@@ -34,7 +33,7 @@ export default function ProgramDetail() {
     <section className="container-wraper">
       {!isLoading ? (
         <>
-          <div className="wraper flex flex-col gap-5">
+          <div className="wraper flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <h1 className="font-lexend-deca text-3xl font-semibold text-slate-800">
@@ -53,9 +52,8 @@ export default function ProgramDetail() {
                   </svg>
                 </a>
               </div>
-              <ProgramContent setOpenDonationModal={setOpenDonationModal} />
+              <ProgramContent {...program} setOpenDonationModal={setOpenDonationModal} />
             </div>
-            <ProgramProgress />
             <ProgramTable setOpenDonorsModal={setOpenDonorsModal} />
           </div>
           {openDonationModal && (

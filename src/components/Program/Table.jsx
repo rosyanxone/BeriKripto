@@ -33,7 +33,7 @@ export default function ProgramTable({ setOpenDonorsModal }) {
               <tr key={i}>
                 <td>{++i}</td>
                 <td>{getShorterAddress(donor.address)}</td>
-                <td>{convertUnixTimestamp(donor.timestamp)}</td>
+                <td>{convertUnixTimestamp(donor.timestamp, true)}</td>
                 <td>{donor.donation} ETH</td>
                 <td>
                   {donor.message.substring(0, 22)}
@@ -72,7 +72,7 @@ export default function ProgramTable({ setOpenDonorsModal }) {
               <tr key={i}>
                 <td>{6 + i}</td>
                 <td>{getShorterAddress(donor.address)}</td>
-                <td>{convertUnixTimestamp(donor.timestamp)}</td>
+                <td>{convertUnixTimestamp(donor.timestamp, true)}</td>
                 <td>{donor.donation} ETH</td>
                 <td>
                   {donor.message.substring(0, 22)}

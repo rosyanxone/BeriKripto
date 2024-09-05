@@ -1,30 +1,35 @@
-export default function ProgramContent({ setOpenDonationModal }) {
+import { convertUnixTimestamp, getShorterAddress } from "../../utils";
+import ProgramProgress from "./Progress";
+
+export default function ProgramContent({
+  image,
+  target,
+  amountCollected,
+  title,
+  description,
+  owner,
+  deadline,
+  setOpenDonationModal,
+}) {
   return (
-    <div className="flex h-[490px] max-h-[490px] gap-5">
-      <img
-        className="w-[70%] rounded-2xl object-cover"
-        src="/thumb/frame-308.png"
-        alt="Header Image"
-      />
-      <div className="flex w-[30%] flex-col justify-between">
+    <div className="flex gap-5">
+      <div className="w-[70%] space-y-5">
+        <img
+          className="max-h-[490px] w-full rounded-2xl object-cover"
+          src={image}
+          alt="Header Image"
+        />
+        <ProgramProgress target={String(target)} amountCollected={String(amountCollected)} />
+      </div>
+      <div className="flex h-[490px] w-[30%] flex-col justify-between">
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Judul</h2>
-          <p className="line-clamp-2 text-pretty text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, faucibus ac
-            elit nec, mattis posuere dui.
-          </p>
+          <p className="line-clamp-2 text-pretty text-sm">{title}</p>
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Cerita</h2>
           <div className="flex flex-col gap-2">
-            <p className="line-clamp-[8] text-balance text-sm">
-              Maecenas ac metus ut erat maximus interdum. Donec vel ex vel
-              sapien convallis maximus pharetra at velit. Maecenas tincidunt
-              turpis nisl. Vivamus pharetra, felis in porttitor porta, turpis
-              erat facilisis nunc, eu fermentum lectus augue in lorem. Integer
-              maximus sem et tellus interdum fermentum. Mauris elit orci,
-              consequat sed leo scelerisque, ornare volutpat tortor.
-            </p>
+            <p className="line-clamp-[8] text-balance text-sm">{description}</p>
           </div>
         </div>
         <div className="flex flex-col gap-1">
@@ -35,7 +40,7 @@ export default function ProgramContent({ setOpenDonationModal }) {
               src="/thumb/frame-308-4x4.png"
               alt="Avatar Image"
             />
-            <p className="text-lg font-medium">0X0E...2E95</p>
+            <p className="text-lg font-medium">{getShorterAddress(owner)}</p>
           </div>
         </div>
         <div className="flex gap-1">
@@ -45,7 +50,7 @@ export default function ProgramContent({ setOpenDonationModal }) {
           </div>
           <div className="flex flex-1 flex-col gap-1">
             <h2 className="font-lexend-deca font-medium">Selesai</h2>
-            <p className="text-sm">30 Juli 2024</p>
+            <p className="text-sm">{convertUnixTimestamp(deadline, false)}</p>
           </div>
         </div>
         <button

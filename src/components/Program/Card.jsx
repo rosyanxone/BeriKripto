@@ -27,7 +27,7 @@ export default function ProgramCard({
       </div>
       <div className="flex flex-col gap-2 px-5">
         <h1 className="text-xl font-semibold">{title}</h1>
-        <p className="text-base text-gray-500">{description}</p>
+        <p className="text-pretty text-base text-gray-500">{description}</p>
       </div>
       <div className="flex flex-col gap-2 px-5">
         <div className="flex justify-between">
@@ -37,10 +37,10 @@ export default function ProgramCard({
           <b>{getFormattedEther(target)} ETH</b>
         </div>
         <div className="flex items-center gap-4">
-          <div className="h-2 w-full rounded-md bg-neutral-300">
+          <div className="h-2 w-full rounded-md bg-neutral-200">
             <div
               className="h-2 rounded-full bg-violet-500"
-              style={{ width: getTargetPercentage(amountCollected, target) }}
+              style={{ width: `${getTargetPercentage(amountCollected, target)}%` }}
             ></div>
           </div>
           {getTargetPercentage(amountCollected, target)}%

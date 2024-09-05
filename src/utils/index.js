@@ -75,18 +75,37 @@ function getTargetPercentage(amount, target) {
   return percentage;
 }
 
-function convertUnixTimestamp(unix) {
-  TimeAgo.addLocale(id);
+function convertUnixTimestamp(unix, isFormal) {
+  let datetime = new Date(unix * 1000);
 
-  TimeAgo.addLabels("id", "custom", customLabels);
+  if (isFormal) {
+    TimeAgo.addLocale(id);
 
-  const timeAgo = new TimeAgo("id");
+    TimeAgo.addLabels("id", "custom", customLabels);
 
-  const customStyle = {
-    labels: "custom",
-  };
+    const timeAgo = new TimeAgo("id");
 
-  return timeAgo.format(new Date(unix * 1000), customStyle);
+    const customStyle = {
+      labels: "custom",
+    };
+
+    datetime = timeAgo.format(datetime, customStyle);
+  } else {
+    const options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    
+    const splitedDateFormat = datetime.toLocaleDateString("en-US", options).split(" ")
+
+    const month = splitedDateFormat[0].slice(0, 4);
+    const day = parseInt(splitedDateFormat[1])
+
+    datetime = `${day} ${month} ${splitedDateFormat[2]}`;
+  }
+
+  return datetime;
 }
 
 export {
