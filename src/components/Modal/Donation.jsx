@@ -1,7 +1,7 @@
 export default function Donation({ setOpenDonationModal }) {
   return (
-    <section className="absolute bottom-0 top-0 z-50 flex h-full w-full items-center justify-center bg-neutral-300 bg-opacity-80">
-      <div className="rounded-2xl bg-white p-6">
+    <section className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md">
+      <div className="rounded-2xl border border-neutral-300 bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-semibold text-slate-800">Donasi</h1>
           <button

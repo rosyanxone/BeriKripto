@@ -56,7 +56,6 @@ export default function ProgramContent({
         <button
           onClick={() => {
             setOpenDonationModal(true);
-            globalThis.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
         >

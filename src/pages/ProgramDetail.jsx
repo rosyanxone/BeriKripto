@@ -18,8 +18,6 @@ export default function ProgramDetail() {
   const { id } = useParams();
   const { program, isLoading } = getProgram(id);
 
-  console.log(program);
-
   useEffect(() => {
     const body = document.body;
     body.style.overflow = "unset";
@@ -52,7 +50,10 @@ export default function ProgramDetail() {
                   </svg>
                 </a>
               </div>
-              <ProgramContent {...program} setOpenDonationModal={setOpenDonationModal} />
+              <ProgramContent
+                {...program}
+                setOpenDonationModal={setOpenDonationModal}
+              />
             </div>
             <ProgramTable setOpenDonorsModal={setOpenDonorsModal} />
           </div>

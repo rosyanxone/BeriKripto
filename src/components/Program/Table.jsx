@@ -50,7 +50,6 @@ export default function ProgramTable({ setOpenDonorsModal }) {
             type="click"
             onClick={() => {
               setOpenDonorsModal(true);
-              globalThis.scrollTo({ top: 0, behavior: "smooth" });
             }}
             className="rounded-lg bg-neutral-200 px-3 py-2 font-semibold"
           >

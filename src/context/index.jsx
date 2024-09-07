@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
 import { createThirdwebClient, getContract, defineChain } from "thirdweb";
-import { useReadContract } from "thirdweb/react";
+import {
+  useActiveAccount,
+  useAutoConnect,
+  useReadContract,
+} from "thirdweb/react";
 
 const StateContext = createContext();
 
@@ -20,6 +24,11 @@ export function StateContextProvider({ children }) {
     chain: defineChain(11155420),
     address: "0xA9ad914Fc3320d9c1477E24BFBc366ee16e02C5e",
   });
+
+  // Connect user wallet
+  useAutoConnect({ client });
+
+  const account = useActiveAccount();
 
   const getPrograms = () => {
     const { data, isLoading } = useReadContract({
@@ -50,7 +59,9 @@ export function StateContextProvider({ children }) {
   return (
     <StateContext.Provider
       value={{
+        client,
         contract,
+        account,
         getPrograms,
         getProgram,
       }}
