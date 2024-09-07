@@ -1,13 +1,17 @@
-import { useConnect } from "thirdweb/react";
+import { useConnect, useDisconnect } from "thirdweb/react";
 import { MetaMaskAvatar } from "react-metamask-avatar";
 
 import { useStateContext } from "../context";
 import { createWallet } from "thirdweb/wallets";
+import { useState } from "react";
 
 export default function Navbar() {
-  const { client, account } = useStateContext();
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+
+  const { client, accountLoading, account, wallet } = useStateContext();
 
   const { connect, isConnecting } = useConnect();
+  const { disconnect } = useDisconnect();
 
   return (
     <nav className="container-wraper sticky top-0 z-20 border-b-2 border-slate-300 bg-white">
@@ -15,14 +19,33 @@ export default function Navbar() {
         <a href="/" className="fontle text-3xl font-semibold text-primary">
           BeriKripto
         </a>
-        {account ? (
+        {accountLoading ? (
+          "Loading..."
+        ) : account ? (
           <div className="flex items-center gap-5">
             <a href="/create" className="rounded-lg bg-primary px-5 py-3">
               <span className="font-lexend-deca text-lg font-semibold text-white">
                 Buat Program
               </span>
             </a>
-            <MetaMaskAvatar address={account.address} size={48} />
+            <div className="relative">
+              <button onClick={() => setOpenProfileModal(!openProfileModal)}>
+                <MetaMaskAvatar address={account.address} size={48} />
+              </button>
+              {openProfileModal && (
+                <button
+                  onClick={() => {
+                    disconnect(wallet);
+                    setOpenProfileModal(false);
+                  }}
+                  className="absolute -left-6 bottom-0 translate-y-10"
+                >
+                  <span className="rounded-md border border-neutral-300 bg-slate-100 px-4 py-2 font-lexend-deca font-semibold text-red-500">
+                    Putuskan
+                  </span>
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <button
