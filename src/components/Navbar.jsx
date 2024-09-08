@@ -3,7 +3,7 @@ import { MetaMaskAvatar } from "react-metamask-avatar";
 
 import { useStateContext } from "../context";
 import { createWallet } from "thirdweb/wallets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const [openProfileModal, setOpenProfileModal] = useState(false);
@@ -12,6 +12,16 @@ export default function Navbar() {
 
   const { connect, isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    if (openProfileModal) {
+      document.body.addEventListener("click", (e) => {
+        if (!e.target.dataset.testid) {
+          setOpenProfileModal(false);
+        }
+      });
+    }
+  }, [openProfileModal]);
 
   return (
     <nav className="container-wraper sticky top-0 z-20 border-b-2 border-slate-300 bg-white">

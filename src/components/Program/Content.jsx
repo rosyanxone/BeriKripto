@@ -1,7 +1,10 @@
 import { convertUnixTimestamp, getShorterAddress } from "../../utils";
 import ProgramProgress from "./Progress";
 
+import { MetaMaskAvatar } from "react-metamask-avatar";
+
 export default function ProgramContent({
+  recipient,
   image,
   target,
   amountCollected,
@@ -19,7 +22,11 @@ export default function ProgramContent({
           src={image}
           alt="Header Image"
         />
-        <ProgramProgress target={String(target)} amountCollected={String(amountCollected)} />
+        <ProgramProgress
+          recipient={recipient}
+          target={String(target)}
+          amountCollected={String(amountCollected)}
+        />
       </div>
       <div className="flex h-[490px] w-[30%] flex-col justify-between">
         <div className="flex flex-col gap-1">
@@ -35,12 +42,10 @@ export default function ProgramContent({
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Pemilik</h2>
           <div className="flex items-center gap-2">
-            <img
-              className="h-8 rounded-full object-contain"
-              src="/thumb/frame-308-4x4.png"
-              alt="Avatar Image"
-            />
-            <p className="text-lg font-medium">{getShorterAddress(owner)}</p>
+            <MetaMaskAvatar address={owner} size={32} />
+            <p className="text-lg font-medium">
+              {getShorterAddress(owner).toUpperCase()}
+            </p>
           </div>
         </div>
         <div className="flex gap-1">

@@ -1,6 +1,21 @@
-export default function Donation({ setOpenDonationModal }) {
+import { useEffect } from "react";
+
+export default function Donation({ openDonationModal, setOpenDonationModal }) {
+  useEffect(() => {
+    if (openDonationModal) {
+      document.body.addEventListener("click", (e) => {
+        if (e.target.id === "donationModalContainer") {
+          setOpenDonationModal(false);
+        }
+      });
+    }
+  }, [openDonationModal]);
+
   return (
-    <section className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md">
+    <section
+      id="donationModalContainer"
+      className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md"
+    >
       <div className="rounded-2xl border border-neutral-300 bg-white p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-4xl font-semibold text-slate-800">Donasi</h1>

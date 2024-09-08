@@ -55,10 +55,10 @@ const customLabels = {
 
 function getShorterAddress(address) {
   return (
-    address.substring(0, 4) +
+    address.substring(0, 6) +
     "..." +
     address.substring(address.length - 4, address.length)
-  ).toUpperCase();
+  );
 }
 
 function getFormattedEther(val) {
@@ -96,11 +96,13 @@ function convertUnixTimestamp(unix, isFormal) {
       month: "long",
       year: "numeric",
     };
-    
-    const splitedDateFormat = datetime.toLocaleDateString("en-US", options).split(" ")
+
+    const splitedDateFormat = datetime
+      .toLocaleDateString("en-US", options)
+      .split(" ");
 
     const month = splitedDateFormat[0].slice(0, 4);
-    const day = parseInt(splitedDateFormat[1])
+    const day = parseInt(splitedDateFormat[1]);
 
     datetime = `${day} ${month} ${splitedDateFormat[2]}`;
   }

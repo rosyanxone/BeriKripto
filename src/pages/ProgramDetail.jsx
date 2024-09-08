@@ -58,13 +58,22 @@ export default function ProgramDetail() {
             <ProgramTable setOpenDonorsModal={setOpenDonorsModal} />
           </div>
           {openDonationModal && (
-            <DonationModal setOpenDonationModal={setOpenDonationModal} />
+            <DonationModal
+              openDonationModal={openDonationModal}
+              setOpenDonationModal={setOpenDonationModal}
+            />
           )}
           {openDonorsModal && (
-            <DonorsModal setOpenDonorsModal={setOpenDonorsModal} />
+            <DonorsModal
+              openDonorsModal={openDonorsModal}
+              setOpenDonorsModal={setOpenDonorsModal}
+            />
           )}
           {openReportModal && (
-            <ReportModal setOpenReportModal={setOpenReportModal} />
+            <ReportModal
+              openReportModal={openReportModal}
+              setOpenReportModal={setOpenReportModal}
+            />
           )}
         </>
       ) : (

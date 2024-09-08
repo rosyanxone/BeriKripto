@@ -1,6 +1,21 @@
-export default function Report({ setOpenReportModal }) {
+import { useEffect } from "react";
+
+export default function Report({ openReportModal, setOpenReportModal }) {
+  useEffect(() => {
+    if (openReportModal) {
+      document.body.addEventListener("click", (e) => {
+        if (e.target.id === "reportModalContainer") {
+          setOpenReportModal(false);
+        }
+      });
+    }
+  }, [openReportModal]);
+
   return (
-    <section className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md">
+    <section
+      id="reportModalContainer"
+      className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md"
+    >
       <div className="max-w-[1020px] rounded-2xl border border-neutral-300 bg-white p-6">
         <div className="mb-2 flex items-center justify-between">
           <h1 className="text-4xl font-semibold text-slate-800">Penyaluran</h1>
