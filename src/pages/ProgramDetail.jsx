@@ -9,14 +9,13 @@ import { useParams } from "react-router-dom";
 import { useStateContext } from "../context";
 
 export default function ProgramDetail() {
+  const { id } = useParams();
+
   const [openDonationModal, setOpenDonationModal] = useState(false);
   const [openDonorsModal, setOpenDonorsModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
 
   const { getProgram } = useStateContext();
-
-  const { id } = useParams();
-  const { program, isLoading } = getProgram(id);
 
   useEffect(() => {
     const body = document.body;
@@ -26,6 +25,8 @@ export default function ProgramDetail() {
       body.style.overflow = "hidden";
     }
   }, [openDonationModal, openDonorsModal, openReportModal]);
+
+  const { program, isLoading } = getProgram(id);
 
   return (
     <section className="container-wraper">

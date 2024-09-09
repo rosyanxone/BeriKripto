@@ -63,7 +63,7 @@ function getShorterAddress(address) {
 
 function getFormattedEther(val) {
   let res = ethers.formatEther(String(val));
-  res = Math.round(res * 1e2) / 1e2;
+  res = Math.round(res * 1e4) / 1e4;
 
   return res;
 }
