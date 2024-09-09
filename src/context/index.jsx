@@ -1,10 +1,16 @@
 import { createContext, useContext } from "react";
-import { createThirdwebClient, getContract, defineChain } from "thirdweb";
+import {
+  createThirdwebClient,
+  getContract,
+  defineChain,
+  prepareContractCall,
+} from "thirdweb";
 import {
   useActiveAccount,
   useActiveWallet,
   useAutoConnect,
   useReadContract,
+  useSendTransaction,
 } from "thirdweb/react";
 
 const StateContext = createContext();
@@ -32,6 +38,14 @@ export function StateContextProvider({ children }) {
   const account = useActiveAccount();
   const wallet = useActiveWallet();
 
+  const {
+    mutate: sendTransaction,
+    data: transactionResult,
+    isPending,
+    isError,
+    isSuccess,
+  } = useSendTransaction({ payModal: false });
+
   const getPrograms = () => {
     const { data, isLoading } = useReadContract({
       contract,
@@ -58,6 +72,24 @@ export function StateContextProvider({ children }) {
     return { program: data, isLoading };
   };
 
+  const donateToProgram = ({ _id, _message, _amountDonation }) => {
+    const transaction = prepareContractCall({
+      contract,
+      method: "function donateToProgram(uint256 _id, string _message) payable",
+      params: [_id, _message],
+      value: _amountDonation,
+    });
+
+    sendTransaction(transaction, {
+      onError: (error) => {
+        console.error(error);
+      },
+      onSuccess: (success) => {
+        console.log(success);
+      },
+    });
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -68,6 +100,11 @@ export function StateContextProvider({ children }) {
         wallet,
         getPrograms,
         getProgram,
+        donateToProgram,
+        transactionResult,
+        isPending,
+        isError,
+        isSuccess,
       }}
     >
       {children}

@@ -1,6 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { useStateContext } from "../../context";
+import { toWei } from "thirdweb";
 
 export default function Donation({ openDonationModal, setOpenDonationModal }) {
+  const { id } = useParams();
+
+  const [amountDonation, setAmountDonation] = useState("");
+  const [message, setMessage] = useState("");
+  const [transactionLoading, setTransactionLoading] = useState(false);
+
+  const { donateToProgram, isPending, isError, isSuccess } = useStateContext();
+
   useEffect(() => {
     if (openDonationModal) {
       document.body.addEventListener("click", (e) => {
@@ -10,6 +22,33 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
       });
     }
   }, [openDonationModal]);
+
+  useEffect(() => {
+    if (isPending) {
+      setTransactionLoading(true);
+    }
+
+    if (isError) {
+      setTransactionLoading(false);
+    }
+
+    if (isSuccess) {
+      setTransactionLoading(false);
+      setOpenDonationModal(false);
+    }
+
+    console.log("isPending: " + isPending);
+    console.log("isError: " + isError);
+    console.log("isSuccess " + isSuccess);
+  }, [isPending, isError, isSuccess]);
+
+  const onSubmitHandler = () => {
+    donateToProgram({
+      _id: id,
+      _message: message,
+      _amountDonation: toWei(amountDonation),
+    });
+  };
 
   return (
     <section
@@ -33,16 +72,20 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
             </svg>
           </button>
         </div>
-        <form action="" className="mt-3 flex flex-col gap-4">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="mt-3 flex flex-col gap-4"
+        >
           <label
             htmlFor="donation"
             className="flex flex-col gap-1 font-lexend-deca font-medium"
           >
             Jumlah Pemberian Donasi
             <input
-              className="w-86 rounded-md bg-neutral-300 p-2"
               id="donation"
-              type="text"
+              value={amountDonation}
+              onChange={(e) => setAmountDonation(e.target.value)}
+              className="w-86 rounded-md bg-neutral-300 p-2"
             />
           </label>
           <label
@@ -51,16 +94,18 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
           >
             Berikan Pesan Anda
             <textarea
-              className="max-h-44 w-86 rounded-md bg-neutral-300 p-2"
-              name="message"
               id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="max-h-44 w-86 rounded-md bg-neutral-300 p-2"
             ></textarea>
           </label>
           <button
-            type="submit"
+            type="click"
+            onClick={onSubmitHandler}
             className="rounded-md bg-dark p-2 font-lexend-deca text-xl font-semibold text-white"
           >
-            Kirim
+            {transactionLoading ? "Loading" : "Kirim"}
           </button>
         </form>
       </div>
