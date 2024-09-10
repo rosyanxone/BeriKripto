@@ -46,6 +46,24 @@ export function StateContextProvider({ children }) {
     isSuccess,
   } = useSendTransaction({ payModal: false });
 
+  const donateToProgram = ({ _id, _message, _amountDonation }) => {
+    const transaction = prepareContractCall({
+      contract,
+      method: "function donateToProgram(uint256 _id, string _message) payable",
+      params: [_id, _message],
+      value: _amountDonation,
+    });
+
+    sendTransaction(transaction, {
+      onError: (error) => {
+        console.error(error);
+      },
+      onSuccess: (success) => {
+        console.log(success);
+      },
+    });
+  };
+
   const getPrograms = () => {
     const { data, isLoading } = useReadContract({
       contract,
@@ -76,12 +94,22 @@ export function StateContextProvider({ children }) {
     return { program: data, isLoading };
   };
 
-  const donateToProgram = ({ _id, _message, _amountDonation }) => {
+  const getDonators = (_id) => {
+    const { data, isLoading } = useReadContract({
+      contract,
+      method:
+        "function getDonators(uint256 _id) view returns ((address donator, uint256 amount, string message, uint256 createdAt)[])",
+      params: [_id],
+    });
+
+    return { donators: data, isLoading };
+  };
+
+  const getDonation = (_id) => {
     const transaction = prepareContractCall({
       contract,
-      method: "function donateToProgram(uint256 _id, string _message) payable",
-      params: [_id, _message],
-      value: _amountDonation,
+      method: "function getDonation(uint256 _id)",
+      params: [_id],
     });
 
     sendTransaction(transaction, {
@@ -92,17 +120,6 @@ export function StateContextProvider({ children }) {
         console.log(success);
       },
     });
-  };
-
-  const getDonators = (_id) => {
-    const { data, isLoading } = useReadContract({
-      contract,
-      method:
-        "function getDonators(uint256 _id) view returns ((address donator, uint256 amount, string message, uint256 createdAt)[])",
-      params: [_id],
-    });
-
-    return { donators: data, isLoading };
   };
 
   const getReport = (_id) => {
@@ -124,10 +141,11 @@ export function StateContextProvider({ children }) {
         accountLoading,
         account,
         wallet,
+        donateToProgram,
         getPrograms,
         getProgram,
-        donateToProgram,
         getDonators,
+        getDonation,
         getReport,
         transactionResult,
         isPending,

@@ -1,68 +1,90 @@
 import { convertUnixTimestamp, getShorterAddress } from "../../utils";
+import { useStateContext } from "../../context";
 import ProgramProgress from "./Progress";
 
+import { useParams } from "react-router-dom";
 import { MetaMaskAvatar } from "react-metamask-avatar";
+import { useEffect } from "react";
 
 export default function ProgramContent({
-  recipient,
-  image,
-  target,
-  amountCollected,
-  title,
-  description,
-  owner,
-  deadline,
-  isFinish,
-  createdAt,
+  program,
   isOwner,
   setOpenDonationModal,
   setOpenReportModal,
 }) {
+  const { id } = useParams();
+
+  const { getDonation, isPending, isError, isSuccess } = useStateContext();
+
+  useEffect(() => {
+    if (isPending) {
+      // do something
+    }
+
+    if (isError) {
+      // do something
+    }
+
+    if (isSuccess) {
+      // do something
+    }
+
+    console.log("isPending: " + isPending);
+    console.log("isError: " + isError);
+    console.log("isSuccess " + isSuccess);
+  }, [isPending, isError, isSuccess]);
+
   return (
     <div className="flex gap-5">
       <div className="w-[70%] space-y-5">
         <img
           className="max-h-[490px] w-full rounded-2xl object-cover"
-          src={image}
+          src={program.image}
           alt="Header Image"
         />
         <ProgramProgress
-          recipient={recipient}
-          target={String(target)}
-          amountCollected={String(amountCollected)}
+          recipient={program.recipient}
+          target={String(program.target)}
+          amountCollected={String(program.amountCollected)}
         />
       </div>
       <div className="flex h-[490px] w-[30%] flex-col justify-between">
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Judul</h2>
-          <p className="line-clamp-2 text-pretty text-sm">{title}</p>
+          <p className="line-clamp-2 text-pretty text-sm">{program.title}</p>
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Cerita</h2>
           <div className="flex flex-col gap-2">
-            <p className="line-clamp-[8] text-balance text-sm">{description}</p>
+            <p className="line-clamp-[8] text-balance text-sm">
+              {program.description}
+            </p>
           </div>
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Pemilik</h2>
           <div className="flex items-center gap-2">
-            <MetaMaskAvatar address={owner} size={32} />
+            <MetaMaskAvatar address={program.owner} size={32} />
             <p className="text-lg font-medium">
-              {getShorterAddress(owner).toUpperCase()}
+              {getShorterAddress(program.owner).toUpperCase()}
             </p>
           </div>
         </div>
         <div className="flex gap-1">
           <div className="flex flex-1 flex-col gap-1">
             <h2 className="font-lexend-deca font-medium">Dibuat</h2>
-            <p className="text-sm">{convertUnixTimestamp(createdAt, false)}</p>
+            <p className="text-sm">
+              {convertUnixTimestamp(program.createdAt, false)}
+            </p>
           </div>
           <div className="flex flex-1 flex-col gap-1">
             <h2 className="font-lexend-deca font-medium">Selesai</h2>
-            <p className="text-sm">{convertUnixTimestamp(deadline, false)}</p>
+            <p className="text-sm">
+              {convertUnixTimestamp(program.deadline, false)}
+            </p>
           </div>
         </div>
-        {isFinish ? (
+        {program.isFinish ? (
           <button
             onClick={() => {
               setOpenReportModal(true);
@@ -72,7 +94,10 @@ export default function ProgramContent({
             {isOwner ? "Buat Laporan Penyaluran" : "Laporan Penyaluran"}
           </button>
         ) : isOwner ? (
-          <button className="rounded-lg bg-dark p-6 text-xl font-semibold text-white">
+          <button
+            onClick={() => getDonation(id)}
+            className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+          >
             Tarik Donasi
           </button>
         ) : (

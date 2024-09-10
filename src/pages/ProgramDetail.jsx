@@ -60,7 +60,7 @@ export default function ProgramDetail() {
                 </a>
               </div>
               <ProgramContent
-                {...program}
+                program={program}
                 isOwner={isOwner}
                 setOpenDonationModal={setOpenDonationModal}
                 setOpenReportModal={setOpenReportModal}
