@@ -16,7 +16,7 @@ export default function ProgramDetail() {
   const [openReportModal, setOpenReportModal] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 
-  const { getProgram, getReport, account } = useStateContext();
+  const { getProgram, account } = useStateContext();
 
   useEffect(() => {
     const body = document.body;
@@ -28,12 +28,12 @@ export default function ProgramDetail() {
   }, [openDonationModal, openDonorsModal, openReportModal]);
 
   const { program, isLoading } = getProgram(id);
-  const { report } = getReport(id);
 
   useEffect(() => {
     if (!isLoading) {
       setIsOwner(() => account && program.owner === account.address);
     }
+    console.log(program);
   }, [isLoading, account]);
 
   return (
@@ -66,7 +66,10 @@ export default function ProgramDetail() {
                 setOpenReportModal={setOpenReportModal}
               />
             </div>
-            <ProgramTable setOpenDonorsModal={setOpenDonorsModal} />
+            <ProgramTable
+              donations={program.donations}
+              setOpenDonorsModal={setOpenDonorsModal}
+            />
           </div>
           {openDonationModal && (
             <DonationModal
@@ -76,13 +79,13 @@ export default function ProgramDetail() {
           )}
           {openDonorsModal && (
             <DonorsModal
+              donations={program.donations}
               openDonorsModal={openDonorsModal}
               setOpenDonorsModal={setOpenDonorsModal}
             />
           )}
           {openReportModal && (
             <ReportModal
-              report={report}
               isOwner={isOwner}
               openReportModal={openReportModal}
               setOpenReportModal={setOpenReportModal}

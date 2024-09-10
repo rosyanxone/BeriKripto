@@ -1,11 +1,19 @@
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { useStateContext } from "../../context";
 
 export default function Report({
-  report,
   isOwner,
   openReportModal,
   setOpenReportModal,
 }) {
+  const { id } = useParams();
+
+  const { getReport } = useStateContext();
+
+  const { report } = getReport(id);
+
   useEffect(() => {
     if (openReportModal) {
       document.body.addEventListener("click", (e) => {

@@ -65,12 +65,22 @@ export function StateContextProvider({ children }) {
   };
 
   const getPrograms = () => {
-    const { data, isLoading } = useReadContract({
+    let { data, isLoading } = useReadContract({
       contract,
       method:
         "function getPrograms() view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, string message, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt)[])",
       params: [],
     });
+
+    if (!isLoading) {
+      data = data.map((d) => {
+        return {
+          ...d,
+          target: String(d.target),
+          amountCollected: String(d.amountCollected),
+        };
+      });
+    }
 
     return { programs: data, isLoading };
   };
@@ -86,9 +96,19 @@ export function StateContextProvider({ children }) {
     if (!isLoading) {
       data = {
         ...data,
+        target: String(data.target),
         deadline: parseInt(data.deadline),
+        amountCollected: String(data.amountCollected),
         createdAt: parseInt(data.createdAt),
       };
+
+      data.donations = data.donations.map((donation) => {
+        return {
+          ...donation,
+          amount: String(donation.amount),
+          createdAt: parseInt(donation.createdAt),
+        };
+      });
     }
 
     return { program: data, isLoading };
@@ -144,7 +164,6 @@ export function StateContextProvider({ children }) {
         donateToProgram,
         getPrograms,
         getProgram,
-        getDonators,
         getDonation,
         getReport,
         transactionResult,

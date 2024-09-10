@@ -28,10 +28,6 @@ export default function ProgramContent({
     if (isSuccess) {
       // do something
     }
-
-    console.log("isPending: " + isPending);
-    console.log("isError: " + isError);
-    console.log("isSuccess " + isSuccess);
   }, [isPending, isError, isSuccess]);
 
   return (

@@ -62,14 +62,14 @@ function getShorterAddress(address) {
 }
 
 function getFormattedEther(val) {
-  let res = ethers.formatEther(String(val));
+  let res = ethers.formatEther(val);
   res = Math.round(res * 1e4) / 1e4;
 
   return res;
 }
 
 function getTargetPercentage(amount, target) {
-  let percentage = parseInt((String(amount) / String(target)) * 100);
+  let percentage = parseInt((amount / target) * 100);
   percentage = percentage > 100 ? 100 : percentage;
 
   return percentage;

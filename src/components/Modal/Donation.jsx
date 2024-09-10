@@ -36,10 +36,6 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
       setTransactionLoading(false);
       // setOpenDonationModal(false);
     }
-
-    console.log("isPending: " + isPending);
-    console.log("isError: " + isError);
-    console.log("isSuccess " + isSuccess);
   }, [isPending, isError, isSuccess]);
 
   const onSubmitHandler = () => {

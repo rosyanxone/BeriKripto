@@ -1,9 +1,9 @@
 import donorsData from "./../../utils/data";
-import { getShorterAddress, convertUnixTimestamp } from "../../utils/index";
+import { getShorterAddress, convertUnixTimestamp, getFormattedEther } from "../../utils/index";
 
 import { useEffect } from "react";
 
-export default function Donors({ openDonorsModal, setOpenDonorsModal }) {
+export default function Donors({ donations, openDonorsModal, setOpenDonorsModal }) {
   useEffect(() => {
     if (openDonorsModal) {
       document.body.addEventListener("click", (e) => {
@@ -35,7 +35,7 @@ export default function Donors({ openDonorsModal, setOpenDonorsModal }) {
             </svg>
           </button>
         </div>
-        <div className="relative h-[445px] overflow-y-scroll">
+        <div className="relative h-[445px] overflow-y-auto">
           <table className="donors w-full">
             <thead className="border-b border-black">
               <tr>
@@ -47,15 +47,15 @@ export default function Donors({ openDonorsModal, setOpenDonorsModal }) {
               </tr>
             </thead>
             <tbody>
-              {donorsData.map((donor, i) => (
+              {donations.map((donation, i) => (
                 <tr key={i}>
                   <td>{++i}</td>
-                  <td>{getShorterAddress(donor.address)}</td>
-                  <td>{convertUnixTimestamp(donor.timestamp, true)}</td>
-                  <td>{donor.donation} ETH</td>
+                  <td>{getShorterAddress(donation.donator)}</td>
+                  <td>{convertUnixTimestamp(String(donation.createdAt), true)}</td>
+                  <td>{getFormattedEther(donation.amount)} ETH</td>
                   <td>
-                    {donor.message.substring(0, 22)}
-                    {donor.message.length > 22 && "..."}
+                    {donation.message.substring(0, 22)}
+                    {donation.message.length > 22 && "..."}
                   </td>
                 </tr>
               ))}
