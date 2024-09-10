@@ -66,7 +66,11 @@ export function StateContextProvider({ children }) {
     });
 
     if (!isLoading) {
-      data = { ...data, deadline: parseInt(data.deadline) };
+      data = {
+        ...data,
+        deadline: parseInt(data.deadline),
+        createdAt: parseInt(data.createdAt),
+      };
     }
 
     return { program: data, isLoading };
@@ -101,6 +105,17 @@ export function StateContextProvider({ children }) {
     return { donators: data, isLoading };
   };
 
+  const getReport = (_id) => {
+    const { data } = useReadContract({
+      contract,
+      method:
+        "function getReport(uint256 _id) view returns ((string title, string story, string image, uint256 createdAt))",
+      params: [_id],
+    });
+
+    return { report: data };
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -113,6 +128,7 @@ export function StateContextProvider({ children }) {
         getProgram,
         donateToProgram,
         getDonators,
+        getReport,
         transactionResult,
         isPending,
         isError,

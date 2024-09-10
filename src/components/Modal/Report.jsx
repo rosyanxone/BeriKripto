@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 
-export default function Report({ openReportModal, setOpenReportModal }) {
+export default function Report({
+  report,
+  isOwner,
+  openReportModal,
+  setOpenReportModal,
+}) {
   useEffect(() => {
     if (openReportModal) {
       document.body.addEventListener("click", (e) => {
@@ -32,7 +37,7 @@ export default function Report({ openReportModal, setOpenReportModal }) {
             </svg>
           </button>
         </div>
-        {false && (
+        {report ? (
           <div className="flex gap-4">
             <img
               src="/thumb/frame-308 (2).png"
@@ -53,15 +58,7 @@ export default function Report({ openReportModal, setOpenReportModal }) {
               </p>
             </div>
           </div>
-        )}
-        {false && (
-          <div className="flex h-[440px] w-[860px] flex-1 items-center justify-center">
-            <span className="mb-5 font-lexend-deca text-2xl font-medium text-slate-500">
-              Laporan Belum Dibuat
-            </span>
-          </div>
-        )}
-        {false && (
+        ) : isOwner ? (
           <form action="" className="flex min-h-[320px] w-[860px] gap-5">
             <div className="flex w-[60%] flex-col gap-2">
               <label
@@ -71,7 +68,7 @@ export default function Report({ openReportModal, setOpenReportModal }) {
                 Unggah Gambar Penyaluran
               </label>
               <div
-                className="relative h-full rounded-md bg-red-500 bg-cover bg-center"
+                className="relative h-full rounded-md bg-neutral-300 bg-cover bg-center"
                 style={{
                   backgroundImage: 'url("/thumb/frame-308.png")',
                 }}
@@ -113,12 +110,11 @@ export default function Report({ openReportModal, setOpenReportModal }) {
               </button>
             </div>
           </form>
-        )}
-        {true && (
+        ) : (
           <div className="flex h-[440px] w-[860px] flex-1 items-center justify-center">
-            <button className="rounded-lg bg-dark px-12 py-5 font-lexend-deca text-2xl font-semibold text-white">
-              Buat laporan
-            </button>
+            <span className="mb-5 font-lexend-deca text-2xl font-medium text-slate-500">
+              Laporan Belum Dibuat
+            </span>
           </div>
         )}
       </div>

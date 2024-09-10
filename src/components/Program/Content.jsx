@@ -12,7 +12,11 @@ export default function ProgramContent({
   description,
   owner,
   deadline,
+  isFinish,
+  createdAt,
+  isOwner,
   setOpenDonationModal,
+  setOpenReportModal,
 }) {
   return (
     <div className="flex gap-5">
@@ -51,21 +55,36 @@ export default function ProgramContent({
         <div className="flex gap-1">
           <div className="flex flex-1 flex-col gap-1">
             <h2 className="font-lexend-deca font-medium">Dibuat</h2>
-            <p className="text-sm">7 Juli 2024</p>
+            <p className="text-sm">{convertUnixTimestamp(createdAt, false)}</p>
           </div>
           <div className="flex flex-1 flex-col gap-1">
             <h2 className="font-lexend-deca font-medium">Selesai</h2>
             <p className="text-sm">{convertUnixTimestamp(deadline, false)}</p>
           </div>
         </div>
-        <button
-          onClick={() => {
-            setOpenDonationModal(true);
-          }}
-          className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
-        >
-          Donasi Sekarang
-        </button>
+        {isFinish ? (
+          <button
+            onClick={() => {
+              setOpenReportModal(true);
+            }}
+            className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+          >
+            {isOwner ? "Buat Laporan Penyaluran" : "Laporan Penyaluran"}
+          </button>
+        ) : isOwner ? (
+          <button className="rounded-lg bg-dark p-6 text-xl font-semibold text-white">
+            Tarik Donasi
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setOpenDonationModal(true);
+            }}
+            className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+          >
+            Donasi Sekarang
+          </button>
+        )}
       </div>
     </div>
   );
