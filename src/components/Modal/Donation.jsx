@@ -38,7 +38,9 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
     }
   }, [isPending, isError, isSuccess]);
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
     donateToProgram({
       _id: id,
       _message: message,
@@ -71,7 +73,7 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
               </button>
             </div>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={onSubmitHandler}
               className="mt-3 flex flex-col gap-4"
             >
               <label
@@ -84,6 +86,7 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   value={amountDonation}
                   onChange={(e) => setAmountDonation(e.target.value)}
                   className="w-86 rounded-md bg-neutral-300 p-2"
+                  required
                 />
               </label>
               <label
@@ -96,11 +99,11 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="max-h-44 w-86 rounded-md bg-neutral-300 p-2"
+                  required
                 ></textarea>
               </label>
               <button
-                type="click"
-                onClick={onSubmitHandler}
+                type="submit"
                 className="rounded-md bg-dark p-2 font-lexend-deca text-xl font-semibold text-white"
               >
                 {transactionLoading ? "Loading" : "Kirim"}
