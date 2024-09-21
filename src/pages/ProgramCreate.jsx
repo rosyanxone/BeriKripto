@@ -1,4 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toWei } from "thirdweb";
+import { upload } from "thirdweb/storage";
+import { Wallet } from "@ethereumjs/wallet";
+
+import { useStateContext } from "../context";
+import { slugify } from "../utils";
 
 export default function ProgramCreate() {
   const [image, setImage] = useState({});
@@ -7,13 +13,38 @@ export default function ProgramCreate() {
   const [deadline, setDeadline] = useState("");
   const [target, setTarget] = useState("");
 
-  // useEffect(() => {
-  //   console.log(image);
-  // }, [image, title]);
+  const { client, createProgram } = useStateContext();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log("GG");
+
+    const uploadToIpfs = async (image) => {
+      const uris = await upload({
+        client,
+        files: [new File([image], slugify(title))],
+      });
+
+      const ipfsUrl = import.meta.env.VITE_IPFS;
+      const imageFile = uris.split("ipfs://")[1];
+
+      return ipfsUrl + imageFile;
+    };
+
+    uploadToIpfs(image).then((imgResult) => {
+      const wallet = Wallet.generate();
+
+      // get new wallet account
+      console.log(wallet.getPrivateKeyString());
+
+      createProgram({
+        _recipient: wallet.getAddressString(),
+        _title: title,
+        _description: description,
+        _target: toWei(target),
+        _deadline: Math.floor(new Date(deadline) / 1000),
+        _image: imgResult,
+      });
+    });
   };
 
   const onUploadHandler = (e) => {
@@ -92,7 +123,7 @@ export default function ProgramCreate() {
             Kapan Program Berakhir
             <input
               className="w-full rounded-md bg-neutral-300 p-2"
-              type="date"
+              type="datetime-local"
               id="deadline"
               onChange={(e) => setDeadline(e.target.value)}
               value={deadline}

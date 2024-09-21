@@ -46,6 +46,31 @@ export function StateContextProvider({ children }) {
     isSuccess,
   } = useSendTransaction({ payModal: false });
 
+  const createProgram = ({
+    _recipient,
+    _title,
+    _description,
+    _target,
+    _deadline,
+    _image,
+  }) => {
+    const transaction = prepareContractCall({
+      contract,
+      method:
+        "function createProgram(address _recipient, string _title, string _description, uint256 _target, uint256 _deadline, string _image)",
+      params: [_recipient, _title, _description, _target, _deadline, _image],
+    });
+
+    sendTransaction(transaction, {
+      onError: (error) => {
+        console.error(error);
+      },
+      onSuccess: (success) => {
+        console.log(success);
+      },
+    });
+  };
+
   const donateToProgram = ({ _id, _message, _amountDonation }) => {
     const transaction = prepareContractCall({
       contract,
@@ -161,6 +186,7 @@ export function StateContextProvider({ children }) {
         accountLoading,
         account,
         wallet,
+        createProgram,
         donateToProgram,
         getPrograms,
         getProgram,

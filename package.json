@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ethereumjs/wallet": "^2.0.4",
     "@metamask/jazzicon": "^2.0.0",
     "ethers": "^6.13.2",
     "javascript-time-ago": "^2.5.10",
