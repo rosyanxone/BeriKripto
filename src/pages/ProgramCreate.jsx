@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toWei } from "thirdweb";
 import { upload } from "thirdweb/storage";
 import { Wallet } from "@ethereumjs/wallet";
 
+import NewAddressModal from "../components/Modal/NewAddress";
+import SuccessModal from "../components/Modal/Success";
 import { useStateContext } from "../context";
 import { slugify } from "../utils";
 
@@ -12,12 +14,68 @@ export default function ProgramCreate() {
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [target, setTarget] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const { client, createProgram } = useStateContext();
+  const [newWallet, setNewWallet] = useState({});
+  const [newWalletAddress, setNewWalletAddress] = useState("");
+  const [openNewAddressModal, setOpenNewAddressModal] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
+
+  const { client, createProgram, isSuccess, isPending } = useStateContext();
+
+  useEffect(() => {
+    // When new wallet confirmed
+    if (newWalletAddress != "") {
+      if (
+        newWallet.getAddressString().toLowerCase() ==
+        newWalletAddress.toLowerCase()
+      ) {
+        setOpenNewAddressModal(false);
+
+        setLoading(true);
+
+        createNewProgram();
+      } else {
+        console.error("Alamat akun tidak sesuai!");
+      }
+    }
+  }, [newWalletAddress]);
+
+  useEffect(() => {
+    if (isPending) {
+      setLoading(true);
+    }
+
+    if (!isPending) {
+      setLoading(false);
+    }
+
+    if (isSuccess) {
+      setOpenSuccessModal(true);
+    }
+  }, [isSuccess, isPending]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
+    const wallet = Wallet.generate();
+
+    setNewWallet(wallet);
+
+    setOpenNewAddressModal(true);
+  };
+
+  const onUploadHandler = (e) => {
+    const file = e.target.files[0];
+    const image = URL.createObjectURL(file);
+
+    const imgPreview = document.getElementById("imagePreview");
+    imgPreview.style.backgroundImage = `url(${image})`;
+
+    setImage(file);
+  };
+
+  const createNewProgram = () => {
     const uploadToIpfs = async (image) => {
       const uris = await upload({
         client,
@@ -31,13 +89,8 @@ export default function ProgramCreate() {
     };
 
     uploadToIpfs(image).then((imgResult) => {
-      const wallet = Wallet.generate();
-
-      // get new wallet account
-      console.log(wallet.getPrivateKeyString());
-
       createProgram({
-        _recipient: wallet.getAddressString(),
+        _recipient: newWalletAddress,
         _title: title,
         _description: description,
         _target: toWei(target),
@@ -47,23 +100,13 @@ export default function ProgramCreate() {
     });
   };
 
-  const onUploadHandler = (e) => {
-    const file = e.target.files[0];
-    const image = URL.createObjectURL(file);
-
-    const imgPreview = document.getElementById("imagePreview");
-    imgPreview.style.backgroundImage = `url(${image})`;
-
-    setImage(file);
-  };
-
   return (
     <div className="container-wraper">
       <form
         onSubmit={onSubmitHandler}
-        className="wraper grid grid-cols-2 gap-5"
+        className="wraper grid grid-cols-3 gap-5"
       >
-        <div className="flex h-full flex-col gap-2">
+        <div className="col-span-2 flex h-full flex-col gap-2">
           <label
             htmlFor="imageUpload"
             className="font-lexend-deca text-lg font-medium"
@@ -72,7 +115,7 @@ export default function ProgramCreate() {
           </label>
           <div
             id="imagePreview"
-            className="relative h-full rounded-md bg-neutral-300 bg-cover bg-center"
+            className="relative h-full rounded-md bg-gray-200 bg-cover bg-center"
             style={{
               backgroundImage: 'url("/thumb/frame-308.png")',
             }}
@@ -87,14 +130,14 @@ export default function ProgramCreate() {
             />
           </div>
         </div>
-        <div className="flex h-full w-full flex-1 flex-col gap-3">
+        <div className="flex h-full w-full flex-col gap-3">
           <label
             htmlFor="title"
             className="flex flex-col gap-2 font-lexend-deca text-lg font-medium"
           >
             Beri Judul Program
             <input
-              className="w-full rounded-md bg-neutral-300 p-2"
+              className="w-full rounded-md bg-gray-200 p-2"
               type="text"
               id="title"
               onChange={(e) => setTitle(e.target.value)}
@@ -108,7 +151,7 @@ export default function ProgramCreate() {
           >
             Ceritakan tentang Program
             <textarea
-              className="w-full rounded-md bg-neutral-300 p-2"
+              className="max-h-52 w-full rounded-md bg-gray-200 p-2"
               name="story"
               id="story"
               onChange={(e) => setDescription(e.target.value)}
@@ -122,7 +165,7 @@ export default function ProgramCreate() {
           >
             Kapan Program Berakhir
             <input
-              className="w-full rounded-md bg-neutral-300 p-2"
+              className="w-full rounded-md bg-gray-200 p-2"
               type="datetime-local"
               id="deadline"
               onChange={(e) => setDeadline(e.target.value)}
@@ -136,24 +179,39 @@ export default function ProgramCreate() {
           >
             Target donasi program
             <input
-              className="w-full rounded-md bg-neutral-300 p-2"
+              className="w-full rounded-md bg-gray-200 p-2"
               type="number"
-              inputMode="numeric"
+              inputMode="text"
               id="target"
-              onChange={(e) => setTarget(e.target.value)}
+              onChange={(e) =>
+                e.target.value < 0 ? false : setTarget(e.target.value)
+              }
               value={target}
-              min={0}
               required
             />
           </label>
-          <button
-            type="submit"
-            className="mt-4 rounded-lg bg-dark py-6 text-2xl font-medium text-white"
-          >
-            Buat Program
-          </button>
+          {loading ? (
+            <span className="mt-4 rounded-lg bg-dark py-6 text-center text-2xl font-medium text-white">
+              Menunggu Konfirmasi...
+            </span>
+          ) : (
+            <button
+              type="submit"
+              className="mt-4 rounded-lg bg-dark py-6 text-2xl font-medium text-white"
+            >
+              Buat Program
+            </button>
+          )}
         </div>
       </form>
+      {openNewAddressModal && (
+        <NewAddressModal
+          walletKey={newWallet.getPrivateKeyString()}
+          setNewWalletAddress={setNewWalletAddress}
+          setOpenNewAddressModal={setOpenNewAddressModal}
+        />
+      )}
+      {openSuccessModal && <SuccessModal />}
     </div>
   );
 }
