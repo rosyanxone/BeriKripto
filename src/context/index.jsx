@@ -12,6 +12,9 @@ import {
   useReadContract,
   useSendTransaction,
 } from "thirdweb/react";
+import { upload } from "thirdweb/storage";
+
+import { slugify } from "../utils";
 
 const StateContext = createContext();
 
@@ -59,6 +62,24 @@ export function StateContextProvider({ children }) {
       method:
         "function createProgram(address _recipient, string _title, string _description, uint256 _target, uint256 _deadline, string _image)",
       params: [_recipient, _title, _description, _target, _deadline, _image],
+    });
+
+    sendTransaction(transaction, {
+      onError: (error) => {
+        console.error(error);
+      },
+      onSuccess: (success) => {
+        console.log(success);
+      },
+    });
+  };
+
+  const createReport = ({ _id, _title, _story, _image }) => {
+    const transaction = prepareContractCall({
+      contract,
+      method:
+        "function createReport(uint256 _id, string _title, string _story, string _image)",
+      params: [_id, _title, _story, _image],
     });
 
     sendTransaction(transaction, {
@@ -178,6 +199,18 @@ export function StateContextProvider({ children }) {
     return { report: data };
   };
 
+  const uploadToIpfs = async (image, title) => {
+    const uris = await upload({
+      client,
+      files: [new File([image], slugify(title))],
+    });
+
+    const ipfsUrl = import.meta.env.VITE_IPFS;
+    const imageFile = uris.split("ipfs://")[1];
+
+    return ipfsUrl + imageFile;
+  };
+
   return (
     <StateContext.Provider
       value={{
@@ -187,11 +220,13 @@ export function StateContextProvider({ children }) {
         account,
         wallet,
         createProgram,
+        createReport,
         donateToProgram,
         getPrograms,
         getProgram,
         getDonation,
         getReport,
+        uploadToIpfs,
         transactionResult,
         isPending,
         isError,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useStateContext } from "../../context";
@@ -10,9 +10,20 @@ export default function Report({
 }) {
   const { id } = useParams();
 
-  const { getReport } = useStateContext();
+  const [reportImage, setReportImage] = useState({});
+  const [reportTitle, setReportTitle] = useState("");
+  const [reportStory, setReportStory] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const { createReport, getReport, uploadToIpfs } = useStateContext();
 
   const { report } = getReport(id);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
+  }, []);
 
   useEffect(() => {
     if (openReportModal) {
@@ -23,6 +34,29 @@ export default function Report({
       });
     }
   }, [openReportModal]);
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
+    uploadToIpfs(reportImage, reportTitle).then((imgResult) => {
+      createReport({
+        _id: id,
+        _title: reportTitle,
+        _story: reportStory,
+        _image: imgResult,
+      });
+    });
+  };
+
+  const onUploadHandler = (e) => {
+    const file = e.target.files[0];
+    const image = URL.createObjectURL(file);
+
+    const imgPreview = document.getElementById("imagePreview");
+    imgPreview.style.backgroundImage = `url(${image})`;
+
+    setReportImage(file);
+  };
 
   return (
     <section
@@ -45,83 +79,100 @@ export default function Report({
             </svg>
           </button>
         </div>
-        {report ? (
-          <div className="flex gap-4">
-            <img
-              src="/thumb/frame-308 (2).png"
-              className="w-[60%] rounded-xl object-cover"
-              alt="Report Image"
-            />
-            <div className="w-[40%]">
-              <h1 className="text-pretty text-lg font-medium">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at
-                mollis turpis, id commodo quam.
-              </h1>
-              <p className="mt-4 text-balance text-sm">
-                Aliquam erat volutpat. Donec dapibus libero in augue tristique
-                vestibulum. Aliquam gravida justo in est ultrices mollis. Sed
-                feugiat suscipit scelerisque. Suspendisse potenti. Praesent
-                dignissim ipsum sit amet tincidunt efficitur. Praesent vel
-                mollis nibh.
-              </p>
-            </div>
-          </div>
-        ) : isOwner ? (
-          <form action="" className="flex min-h-[320px] w-[860px] gap-5">
-            <div className="flex w-[60%] flex-col gap-2">
-              <label
-                htmlFor="changeImage"
-                className="font-lexend-deca font-medium"
-              >
-                Unggah Gambar Penyaluran
-              </label>
-              <div
-                className="relative h-full rounded-md bg-neutral-300 bg-cover bg-center"
-                style={{
-                  backgroundImage: 'url("/thumb/frame-308.png")',
-                }}
-              >
-                <button
-                  id="changeImage"
-                  type="click"
-                  className="absolute bottom-4 left-4 rounded-md bg-light px-4 py-2 text-sm"
-                >
-                  Ubah Gambar
-                </button>
-              </div>
-            </div>
-            <div className="flex w-[40%] flex-1 flex-col gap-3">
-              <label
-                htmlFor="title"
-                className="flex flex-col gap-2 font-lexend-deca font-medium"
-              >
-                Judul Laporan Penyaluran
-                <input
-                  className="w-full rounded-md bg-neutral-300 p-2"
-                  type="text"
-                  id="title"
+        {!loading ? (
+          <>
+            {report ? (
+              <div className="flex gap-4">
+                <img
+                  src={report.image}
+                  className="w-[60%] rounded-xl object-cover"
+                  alt="Report Image"
                 />
-              </label>
-              <label
-                htmlFor="story"
-                className="flex flex-col gap-2 font-lexend-deca font-medium"
+                <div className="w-[40%]">
+                  <h1 className="text-pretty text-lg font-medium">
+                    {report.title}
+                  </h1>
+                  <p className="mt-4 text-balance text-sm">{report.story}</p>
+                </div>
+              </div>
+            ) : isOwner ? (
+              <form
+                onSubmit={onSubmitHandler}
+                className="flex min-h-[320px] w-[860px] gap-5"
               >
-                Ceritakan Proses Penyaluran
-                <textarea
-                  className="h-48 max-h-60 w-full rounded-md bg-neutral-300 p-2"
-                  name="story"
-                  id="story"
-                ></textarea>
-              </label>
-              <button className="rounded-lg bg-dark py-4 text-2xl font-semibold text-white">
-                Buat
-              </button>
-            </div>
-          </form>
+                <div className="flex w-[60%] flex-col gap-2">
+                  <label
+                    htmlFor="changeImage"
+                    className="font-lexend-deca font-medium"
+                  >
+                    Unggah Gambar Penyaluran
+                  </label>
+                  <div
+                    id="imagePreview"
+                    className="relative h-full rounded-md bg-gray-200 bg-cover bg-center"
+                    style={{
+                      backgroundImage: 'url("/thumb/frame-308.png")',
+                    }}
+                  >
+                    <input
+                      id="imageUpload"
+                      type="file"
+                      className="absolute bottom-4 left-4 text-slate-500 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-neutral-100 file:px-5 file:py-3 file:text-base"
+                      onChange={onUploadHandler}
+                      accept="image/*"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex w-[40%] flex-1 flex-col gap-3">
+                  <label
+                    htmlFor="title"
+                    className="flex flex-col gap-2 font-lexend-deca font-medium"
+                  >
+                    Judul Laporan Penyaluran
+                    <input
+                      className="w-full rounded-md bg-gray-200 p-2"
+                      type="text"
+                      id="title"
+                      onChange={(e) => setReportTitle(e.target.value)}
+                      value={reportTitle}
+                      required
+                    />
+                  </label>
+                  <label
+                    htmlFor="story"
+                    className="flex flex-col gap-2 font-lexend-deca font-medium"
+                  >
+                    Ceritakan Proses Penyaluran
+                    <textarea
+                      className="h-48 max-h-60 w-full rounded-md bg-gray-200 p-2"
+                      name="story"
+                      id="story"
+                      onChange={(e) => setReportStory(e.target.value)}
+                      value={reportStory}
+                      required
+                    ></textarea>
+                  </label>
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-dark py-4 text-2xl font-semibold text-white"
+                  >
+                    Buat
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="flex h-[440px] w-[860px] flex-1 items-center justify-center">
+                <span className="mb-5 font-lexend-deca text-2xl font-medium text-slate-500">
+                  Laporan Belum Dibuat
+                </span>
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex h-[440px] w-[860px] flex-1 items-center justify-center">
             <span className="mb-5 font-lexend-deca text-2xl font-medium text-slate-500">
-              Laporan Belum Dibuat
+              Mohon tunggu...
             </span>
           </div>
         )}

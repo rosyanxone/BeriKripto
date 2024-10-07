@@ -85,7 +85,7 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   id="donation"
                   value={amountDonation}
                   onChange={(e) => setAmountDonation(e.target.value)}
-                  className="w-86 rounded-md bg-neutral-300 p-2"
+                  className="w-86 rounded-md bg-gray-200 p-2"
                   required
                 />
               </label>
@@ -98,7 +98,7 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   id="message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="max-h-44 w-86 rounded-md bg-neutral-300 p-2"
+                  className="max-h-44 w-86 rounded-md bg-gray-200 p-2"
                   required
                 ></textarea>
               </label>

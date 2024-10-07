@@ -51,8 +51,8 @@ export default function ProgramContent({
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Cerita</h2>
-          <div className="flex flex-col gap-2">
-            <p className="line-clamp-[8] text-balance text-sm">
+          <div className="flex flex-col gap-2 max-h-40 overflow-auto">
+            <p className="text-balance text-sm">
               {program.description}
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function ProgramContent({
             }}
             className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
           >
-            {isOwner ? "Buat Laporan Penyaluran" : "Laporan Penyaluran"}
+            Laporan Penyaluran
           </button>
         ) : isOwner ? (
           <button

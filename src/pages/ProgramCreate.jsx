@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { toWei } from "thirdweb";
-import { upload } from "thirdweb/storage";
 import { Wallet } from "@ethereumjs/wallet";
 
 import NewAddressModal from "../components/Modal/NewAddress";
 import SuccessModal from "../components/Modal/Success";
 import { useStateContext } from "../context";
-import { slugify } from "../utils";
 
 export default function ProgramCreate() {
   const [image, setImage] = useState({});
@@ -21,7 +19,7 @@ export default function ProgramCreate() {
   const [openNewAddressModal, setOpenNewAddressModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  const { client, createProgram, isSuccess, isPending } = useStateContext();
+  const { client, createProgram, uploadToIpfs, isSuccess, isPending } = useStateContext();
 
   useEffect(() => {
     // When new wallet confirmed
@@ -76,19 +74,7 @@ export default function ProgramCreate() {
   };
 
   const createNewProgram = () => {
-    const uploadToIpfs = async (image) => {
-      const uris = await upload({
-        client,
-        files: [new File([image], slugify(title))],
-      });
-
-      const ipfsUrl = import.meta.env.VITE_IPFS;
-      const imageFile = uris.split("ipfs://")[1];
-
-      return ipfsUrl + imageFile;
-    };
-
-    uploadToIpfs(image).then((imgResult) => {
+    uploadToIpfs(image, title).then((imgResult) => {
       createProgram({
         _recipient: newWalletAddress,
         _title: title,
