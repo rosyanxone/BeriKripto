@@ -124,6 +124,7 @@ export function StateContextProvider({ children }) {
           ...d,
           target: String(d.target),
           amountCollected: String(d.amountCollected),
+          createdAt: parseInt(d.createdAt),
         };
       });
     }

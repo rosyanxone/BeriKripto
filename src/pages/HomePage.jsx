@@ -5,15 +5,29 @@ import { useStateContext } from "../context";
 
 export default function HomePage() {
   const [totalPrograms, setTotalPrograms] = useState(0);
+  const [programs, setPrograms] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const { getPrograms } = useStateContext();
-  const { programs, isLoading } = getPrograms();
+  const { account, getPrograms } = useStateContext();
+  const { programs: programsRaw, isLoading } = getPrograms();
 
   useEffect(() => {
     if (!isLoading) {
-      setTotalPrograms(programs.length);
+      let countProgram = 0;
+
+      programsRaw.map((program) => {
+        if (!account || program.owner != account.address) {
+          countProgram++;
+        }
+      });
+
+      programsRaw.sort((a, b) => b.createdAt - a.createdAt);
+
+      setTotalPrograms(countProgram);
+      setPrograms(programsRaw);
+      setLoading(false);
     }
-  }, [programs]);
+  }, [isLoading, account]);
 
   return (
     <section className="container-wraper" id="programs">
@@ -21,23 +35,47 @@ export default function HomePage() {
         <div className="">
           <p className="text-xl font-medium">Semua Program ({totalPrograms})</p>
           <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
-            {!isLoading
-              ? programs.map((program, i) => (
-                  <ProgramCard key={i} {...program} id={i} />
-                ))
+            {!loading
+              ? programs.map((program, i) => {
+                  if (!account || program.owner != account.address) {
+                    return (
+                      <ProgramCard
+                        key={i}
+                        {...program}
+                        id={Math.abs(i - (programsRaw.length - 1))}
+                      />
+                    );
+                  }
+                })
               : "Loading..."}
           </div>
         </div>
-        {/* <div className="">
-          <p className="text-xl font-medium">Program Saya (4)</p>
-          <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
-            {Array(4)
-              .fill(1)
-              .map((x, i) => (
-                <ProgramCard key={i} />
-              ))}
+        {!loading ? (
+          <div className="">
+            {totalPrograms != programsRaw.length && (
+              <>
+                <p className="text-xl font-medium">
+                  Program Saya ({programs.length - totalPrograms})
+                </p>
+                <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
+                  {programs.map((program, i) => {
+                    if (account && program.owner === account.address) {
+                      return (
+                        <ProgramCard
+                          key={i}
+                          {...program}
+                          id={Math.abs(i - (programsRaw.length - 1))}
+                        />
+                      );
+                    }
+                  })}
+                </div>
+              </>
+            )}
           </div>
-        </div> */}
+        ) : (
+          "Loading..."
+        )}
       </div>
     </section>
   );
