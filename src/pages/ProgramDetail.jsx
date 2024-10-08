@@ -17,6 +17,17 @@ export default function ProgramDetail() {
   const [isOwner, setIsOwner] = useState(false);
 
   const { getProgram, account } = useStateContext();
+  const { program, isLoading } = getProgram(id);
+
+  const [donations, setDonations] = useState({});
+  const [isSortedByDonation, setIsSortedByDonation] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onSortHandler(false);
+      setIsOwner(() => account && program.owner === account.address);
+    }
+  }, [isLoading, account]);
 
   useEffect(() => {
     const body = document.body;
@@ -27,14 +38,17 @@ export default function ProgramDetail() {
     }
   }, [openDonationModal, openDonorsModal, openReportModal]);
 
-  const { program, isLoading } = getProgram(id);
+  const onSortHandler = (bool) => {
+    setIsSortedByDonation(bool);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setIsOwner(() => account && program.owner === account.address);
+    if (bool) {
+      program.donations.sort((a, b) => parseInt(b.amount) - parseInt(a.amount)); // donation
+    } else {
+      program.donations.sort((a, b) => a.createdAt - b.createdAt); // date
     }
-    console.log(program);
-  }, [isLoading, account]);
+
+    setDonations(program.donations)
+  };
 
   return (
     <section className="container-wraper">
@@ -67,8 +81,10 @@ export default function ProgramDetail() {
               />
             </div>
             <ProgramTable
-              donations={program.donations}
+              donations={donations}
               setOpenDonorsModal={setOpenDonorsModal}
+              isSortedByDonation={isSortedByDonation}
+              onSortHandler={onSortHandler}
             />
           </div>
           {openDonationModal && (
@@ -79,7 +95,7 @@ export default function ProgramDetail() {
           )}
           {openDonorsModal && (
             <DonorsModal
-              donations={program.donations}
+              donations={donations}
               openDonorsModal={openDonorsModal}
               setOpenDonorsModal={setOpenDonorsModal}
             />

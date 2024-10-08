@@ -82,7 +82,7 @@ export default function Report({
         {!loading ? (
           <>
             {report ? (
-              <div className="flex gap-4">
+              <div className="flex min-h-[320px] w-[860px] gap-5">
                 <img
                   src={report.image}
                   className="w-[60%] rounded-xl object-cover"

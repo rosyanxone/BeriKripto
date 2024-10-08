@@ -1,4 +1,3 @@
-import donorsData from "./../../utils/data";
 import { getShorterAddress, convertUnixTimestamp, getFormattedEther } from "../../utils/index";
 
 import { useEffect } from "react";
