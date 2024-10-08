@@ -44,10 +44,10 @@ export default function ProgramDetail() {
     if (bool) {
       program.donations.sort((a, b) => parseInt(b.amount) - parseInt(a.amount)); // donation
     } else {
-      program.donations.sort((a, b) => a.createdAt - b.createdAt); // date
+      program.donations.sort((a, b) => b.createdAt - a.createdAt); // date
     }
 
-    setDonations(program.donations)
+    setDonations(program.donations);
   };
 
   return (

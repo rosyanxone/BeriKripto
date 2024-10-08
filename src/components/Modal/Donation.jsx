@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toWei } from "thirdweb";
 
 import { useStateContext } from "../../context";
-import { toWei } from "thirdweb";
+import SuccessModal from "./Success";
 
 export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const { id } = useParams();
@@ -34,7 +35,6 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
 
     if (isSuccess) {
       setTransactionLoading(false);
-      // setOpenDonationModal(false);
     }
   }, [isPending, isError, isSuccess]);
 
@@ -49,13 +49,13 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
   };
 
   return (
-    <section
-      id="donationModalContainer"
-      className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md"
-    >
-      <div className="rounded-2xl border border-neutral-300 bg-white p-6">
-        {!isSuccess ? (
-          <>
+    <>
+      {!isSuccess ? (
+        <section
+          id="donationModalContainer"
+          className="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-transparent backdrop-blur-md"
+        >
+          <div className="rounded-2xl border border-neutral-300 bg-white p-6">
             <div className="flex items-center justify-between">
               <h1 className="text-4xl font-semibold text-slate-800">Donasi</h1>
               <button
@@ -82,10 +82,16 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
               >
                 Jumlah Pemberian Donasi
                 <input
-                  id="donation"
-                  value={amountDonation}
-                  onChange={(e) => setAmountDonation(e.target.value)}
                   className="w-86 rounded-md bg-gray-200 p-2"
+                  type="number"
+                  inputMode="text"
+                  id="donation"
+                  onChange={(e) =>
+                    e.target.value < 0
+                      ? false
+                      : setAmountDonation(e.target.value)
+                  }
+                  value={amountDonation}
                   required
                 />
               </label>
@@ -109,11 +115,14 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                 {transactionLoading ? "Loading" : "Kirim"}
               </button>
             </form>
-          </>
-        ) : (
-          "Berhasil! Harap tunggu beberapa saat.."
-        )}
-      </div>
-    </section>
+          </div>
+        </section>
+      ) : (
+        <SuccessModal
+          message="Donasi telah berhasil dikirim!"
+          navUrl={`/detail/${id}`}
+        />
+      )}
+    </>
   );
 }

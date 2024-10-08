@@ -14,6 +14,8 @@ export default function ProgramContent({
 }) {
   const { id } = useParams();
 
+  const dateTimeNow = Math.floor(Date.now() / 1000);
+
   const { getDonation, isPending, isError, isSuccess } = useStateContext();
 
   useEffect(() => {
@@ -51,10 +53,8 @@ export default function ProgramContent({
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="font-lexend-deca font-medium">Cerita</h2>
-          <div className="flex flex-col gap-2 max-h-40 overflow-auto">
-            <p className="text-balance text-sm">
-              {program.description}
-            </p>
+          <div className="flex max-h-40 flex-col gap-2 overflow-auto">
+            <p className="text-balance text-sm">{program.description}</p>
           </div>
         </div>
         <div className="flex flex-col gap-1">
@@ -106,6 +106,16 @@ export default function ProgramContent({
             Donasi Sekarang
           </button>
         )}
+
+        {/* New Logic */}
+        <div className="">
+          {program.isFinish
+            ? "laporan penyaluran"
+            : program.amountCollected >= program.target ||
+                dateTimeNow >= program.deadline
+              ? isOwner && "tarik donasi"
+              : "donasi sekarang"}
+        </div>
       </div>
     </div>
   );

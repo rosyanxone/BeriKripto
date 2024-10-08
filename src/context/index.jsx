@@ -103,6 +103,7 @@ export function StateContextProvider({ children }) {
     sendTransaction(transaction, {
       onError: (error) => {
         console.error(error);
+        alert(error);
       },
       onSuccess: (success) => {
         console.log(success);

@@ -19,7 +19,8 @@ export default function ProgramCreate() {
   const [openNewAddressModal, setOpenNewAddressModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  const { client, createProgram, uploadToIpfs, isSuccess, isPending } = useStateContext();
+  const { client, createProgram, uploadToIpfs, isSuccess, isPending } =
+    useStateContext();
 
   useEffect(() => {
     // When new wallet confirmed
@@ -197,7 +198,9 @@ export default function ProgramCreate() {
           setOpenNewAddressModal={setOpenNewAddressModal}
         />
       )}
-      {openSuccessModal && <SuccessModal />}
+      {openSuccessModal && (
+        <SuccessModal message="Program telah berhasil dibuat!" navUrl={"/"} />
+      )}
     </div>
   );
 }
