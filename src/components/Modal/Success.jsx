@@ -1,8 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
 export default function Success({ message, navUrl }) {
-  const navigate = useNavigate();
-
   return (
     <section
       id="donationModalContainer"
@@ -16,12 +12,12 @@ export default function Success({ message, navUrl }) {
             alt="success icon"
           />
           <span className="text-xl font-light">{message}</span>
-          <button
-            onClick={() => navigate(navUrl)}
+          <a
+            href={navUrl}
             className="rounded-lg bg-blue-400 px-5 py-3 text-sm font-semibold text-white"
           >
             OK
-          </button>
+          </a>
         </div>
       </div>
     </section>

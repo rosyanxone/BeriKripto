@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   createThirdwebClient,
   getContract,
@@ -48,6 +48,11 @@ export function StateContextProvider({ children }) {
     isError,
     isSuccess,
   } = useSendTransaction({ payModal: false });
+
+  const [transactionFeedback, setTransactionFeedback] = useState({
+    result: null,
+    error: null,
+  });
 
   const createProgram = ({
     _recipient,
@@ -103,10 +108,11 @@ export function StateContextProvider({ children }) {
     sendTransaction(transaction, {
       onError: (error) => {
         console.error(error);
-        alert(error);
+        setTransactionFeedback({ ...transactionFeedback, error: error });
       },
       onSuccess: (success) => {
         console.log(success);
+        setTransactionFeedback({ ...transactionFeedback, success: success });
       },
     });
   };
@@ -221,6 +227,7 @@ export function StateContextProvider({ children }) {
         accountLoading,
         account,
         wallet,
+        transactionFeedback,
         createProgram,
         createReport,
         donateToProgram,

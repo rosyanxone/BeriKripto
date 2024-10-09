@@ -4,6 +4,7 @@ import { toWei } from "thirdweb";
 
 import { useStateContext } from "../../context";
 import SuccessModal from "./Success";
+import AnimateLoading from "../AnimateLoading";
 
 export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const { id } = useParams();
@@ -12,7 +13,15 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const [message, setMessage] = useState("");
   const [transactionLoading, setTransactionLoading] = useState(false);
 
-  const { donateToProgram, isPending, isError, isSuccess } = useStateContext();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const {
+    transactionFeedback,
+    donateToProgram,
+    isPending,
+    isError,
+    isSuccess,
+  } = useStateContext();
 
   useEffect(() => {
     if (openDonationModal) {
@@ -31,6 +40,16 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
 
     if (isError) {
       setTransactionLoading(false);
+
+      if (transactionFeedback.error.code === 3) {
+        setErrorMessage("Saldo pengguna tidak mencukupi!");
+      } else if (transactionFeedback.error.code === 4001) {
+        setErrorMessage("Pengguna menolak melanjutkan transaksi!");
+      } else if (transactionFeedback.error.name === "TransactionError") {
+        setErrorMessage("Pemberian donasi harus lebih dari 0!");
+      } else {
+        setErrorMessage(transactionFeedback.error.message);
+      }
     }
 
     if (isSuccess) {
@@ -72,6 +91,11 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                 </svg>
               </button>
             </div>
+            {errorMessage && (
+              <p className="mt-2 max-w-[400px] overflow-auto font-poppins font-semibold text-red-500">
+                {errorMessage}
+              </p>
+            )}
             <form
               onSubmit={onSubmitHandler}
               className="mt-3 flex flex-col gap-4"
@@ -110,9 +134,13 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
               </label>
               <button
                 type="submit"
-                className="rounded-md bg-dark p-2 font-lexend-deca text-xl font-semibold text-white"
+                className="flex justify-center rounded-md bg-dark p-3 font-lexend-deca text-xl font-semibold text-white"
               >
-                {transactionLoading ? "Loading" : "Kirim"}
+                {transactionLoading ? (
+                  <AnimateLoading size="7" color="white" />
+                ) : (
+                  "Kirim"
+                )}
               </button>
             </form>
           </div>

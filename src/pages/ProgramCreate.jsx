@@ -19,7 +19,7 @@ export default function ProgramCreate() {
   const [openNewAddressModal, setOpenNewAddressModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  const { client, createProgram, uploadToIpfs, isSuccess, isPending } =
+  const { transactionFeedback, createProgram, uploadToIpfs, isSuccess, isPending } =
     useStateContext();
 
   useEffect(() => {

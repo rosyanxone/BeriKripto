@@ -3,6 +3,7 @@ import ProgramContent from "../components/Program/Content";
 import DonationModal from "../components/Modal/Donation";
 import DonorsModal from "../components/Modal/Donors";
 import ReportModal from "../components/Modal/Report";
+import AnimateLoading from "../components/AnimateLoading";
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -109,7 +110,9 @@ export default function ProgramDetail() {
           )}
         </>
       ) : (
-        "Loading..."
+        <div className="flex h-[70vh] items-center">
+          <AnimateLoading />
+        </div>
       )}
     </section>
   );

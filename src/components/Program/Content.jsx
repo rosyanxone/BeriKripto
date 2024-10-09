@@ -89,13 +89,16 @@ export default function ProgramContent({
           >
             Laporan Penyaluran
           </button>
-        ) : isOwner ? (
-          <button
-            onClick={() => getDonation(id)}
-            className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
-          >
-            Tarik Donasi
-          </button>
+        ) : program.amountCollected >= program.target ||
+          dateTimeNow >= program.deadline ? (
+          isOwner && (
+            <button
+              onClick={() => getDonation(id)}
+              className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+            >
+              Tarik Donasi
+            </button>
+          )
         ) : (
           <button
             onClick={() => {
@@ -106,16 +109,6 @@ export default function ProgramContent({
             Donasi Sekarang
           </button>
         )}
-
-        {/* New Logic */}
-        <div className="">
-          {program.isFinish
-            ? "laporan penyaluran"
-            : program.amountCollected >= program.target ||
-                dateTimeNow >= program.deadline
-              ? isOwner && "tarik donasi"
-              : "donasi sekarang"}
-        </div>
       </div>
     </div>
   );
