@@ -4,6 +4,7 @@ import { Wallet } from "@ethereumjs/wallet";
 
 import NewAddressModal from "../components/Modal/NewAddress";
 import SuccessModal from "../components/Modal/Success";
+import AnimateLoading from "../components/AnimateLoading";
 import { useStateContext } from "../context";
 
 export default function ProgramCreate() {
@@ -19,8 +20,16 @@ export default function ProgramCreate() {
   const [openNewAddressModal, setOpenNewAddressModal] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
-  const { transactionFeedback, createProgram, uploadToIpfs, isSuccess, isPending } =
-    useStateContext();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const {
+    transactionFeedback,
+    createProgram,
+    uploadToIpfs,
+    isPending,
+    isError,
+    isSuccess,
+  } = useStateContext();
 
   useEffect(() => {
     // When new wallet confirmed
@@ -29,13 +38,13 @@ export default function ProgramCreate() {
         newWallet.getAddressString().toLowerCase() ==
         newWalletAddress.toLowerCase()
       ) {
+        setErrorMessage("");
         setOpenNewAddressModal(false);
-
         setLoading(true);
 
         createNewProgram();
       } else {
-        console.error("Alamat akun tidak sesuai!");
+        setErrorMessage("Alamat akun tidak sesuai!");
       }
     }
   }, [newWalletAddress]);
@@ -45,14 +54,22 @@ export default function ProgramCreate() {
       setLoading(true);
     }
 
-    if (!isPending) {
+    if (isError) {
       setLoading(false);
+
+      if (transactionFeedback.error.code === 3) {
+        setErrorMessage("Saldo pengguna tidak mencukupi!");
+      } else if (transactionFeedback.error.code === 4001) {
+        setErrorMessage("Pengguna menolak melanjutkan transaksi!");
+      } else {
+        setErrorMessage(transactionFeedback.error.message);
+      }
     }
 
     if (isSuccess) {
       setOpenSuccessModal(true);
     }
-  }, [isSuccess, isPending]);
+  }, [isSuccess, isError, isPending]);
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -65,13 +82,48 @@ export default function ProgramCreate() {
   };
 
   const onUploadHandler = (e) => {
+    setErrorMessage("");
+
     const file = e.target.files[0];
+
+    if (file && !file.type.includes("image")) {
+      setErrorMessage("Tipe file harus berupa gambar!");
+
+      e.target.value = null;
+
+      return false;
+    }
+
     const image = URL.createObjectURL(file);
 
     const imgPreview = document.getElementById("imagePreview");
     imgPreview.style.backgroundImage = `url(${image})`;
 
     setImage(file);
+  };
+
+  const onDeadlineChangeHandler = (e) => {
+    setErrorMessage("");
+
+    if (e.target.value < new Date().toISOString().slice(0, -8)) {
+      setErrorMessage("Deadline harus berupa waktu di masa depan!");
+
+      return false;
+    }
+
+    setDeadline(e.target.value);
+  };
+
+  const onTargetChangeHandler = (e) => {
+    setErrorMessage("");
+
+    if (e.target.value < 0) {
+      setErrorMessage("Target donasi tidak dapat kurang dari 0!");
+
+      return false;
+    }
+
+    setTarget(e.target.value);
   };
 
   const createNewProgram = () => {
@@ -88,7 +140,12 @@ export default function ProgramCreate() {
   };
 
   return (
-    <div className="container-wraper">
+    <div className="container-wraper flex-col">
+      {errorMessage && (
+        <p className="max-w-[400px] font-poppins font-semibold text-red-500">
+          {errorMessage}
+        </p>
+      )}
       <form
         onSubmit={onSubmitHandler}
         className="wraper grid grid-cols-3 gap-5"
@@ -155,7 +212,7 @@ export default function ProgramCreate() {
               className="w-full rounded-md bg-gray-200 p-2"
               type="datetime-local"
               id="deadline"
-              onChange={(e) => setDeadline(e.target.value)}
+              onChange={(e) => onDeadlineChangeHandler(e)}
               value={deadline}
               required
             />
@@ -170,15 +227,14 @@ export default function ProgramCreate() {
               type="number"
               inputMode="text"
               id="target"
-              onChange={(e) =>
-                e.target.value < 0 ? false : setTarget(e.target.value)
-              }
+              onChange={(e) => onTargetChangeHandler(e)}
               value={target}
               required
             />
           </label>
           {loading ? (
-            <span className="mt-4 rounded-lg bg-dark py-6 text-center text-2xl font-medium text-white">
+            <span className="mt-4 inline-flex justify-center gap-3 rounded-lg bg-dark py-6 text-center text-2xl font-medium text-white">
+              <AnimateLoading color="white" mr="0" size="6" />
               Menunggu Konfirmasi...
             </span>
           ) : (
@@ -196,6 +252,7 @@ export default function ProgramCreate() {
           walletKey={newWallet.getPrivateKeyString()}
           setNewWalletAddress={setNewWalletAddress}
           setOpenNewAddressModal={setOpenNewAddressModal}
+          errorMessage={errorMessage}
         />
       )}
       {openSuccessModal && (

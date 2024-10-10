@@ -24,4 +24,12 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /w-(6|7|8)/,
+    },
+    {
+      pattern: /mr-(0|3)/,
+    },
+  ],
 };

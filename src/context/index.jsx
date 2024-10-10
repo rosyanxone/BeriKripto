@@ -72,9 +72,11 @@ export function StateContextProvider({ children }) {
     sendTransaction(transaction, {
       onError: (error) => {
         console.error(error);
+        setTransactionFeedback({ ...transactionFeedback, error: error });
       },
       onSuccess: (success) => {
         console.log(success);
+        setTransactionFeedback({ ...transactionFeedback, success: success });
       },
     });
   };

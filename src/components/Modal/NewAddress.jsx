@@ -4,6 +4,7 @@ export default function NewAddress({
   walletKey,
   setNewWalletAddress,
   setOpenNewAddressModal,
+  errorMessage,
 }) {
   const [isShow, setIsShow] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -45,6 +46,11 @@ export default function NewAddress({
             </svg>
           </button>
         </div>
+        {errorMessage && (
+          <p className="max-w-[400px] font-poppins font-semibold text-red-500">
+            {errorMessage}
+          </p>
+        )}
         <form onSubmit={onSubmitHandler} className="mt-3 flex flex-col gap-6">
           <label
             htmlFor="privateKey"

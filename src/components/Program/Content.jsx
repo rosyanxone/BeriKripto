@@ -1,6 +1,11 @@
-import { convertUnixTimestamp, getShorterAddress } from "../../utils";
+import {
+  convertUnixTimestamp,
+  getFormattedEther,
+  getShorterAddress,
+} from "../../utils";
 import { useStateContext } from "../../context";
 import ProgramProgress from "./Progress";
+import AnimateLoading from "../AnimateLoading";
 
 import { useParams } from "react-router-dom";
 import { MetaMaskAvatar } from "react-metamask-avatar";
@@ -89,16 +94,23 @@ export default function ProgramContent({
           >
             Laporan Penyaluran
           </button>
-        ) : program.amountCollected >= program.target ||
-          dateTimeNow >= program.deadline ? (
-          isOwner && (
-            <button
-              onClick={() => getDonation(id)}
-              className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
-            >
-              Tarik Donasi
-            </button>
-          )
+        ) : (getFormattedEther(program.amountCollected) >=
+            getFormattedEther(program.target) ||
+            dateTimeNow >= program.deadline) &&
+          isOwner ? (
+          <button
+            onClick={() => getDonation(id)}
+            className="inline-flex justify-center gap-3 rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+          >
+            {isPending ? (
+              <>
+                <AnimateLoading color="white" mr="0" size="6" />
+                Menarik Donasi ...
+              </>
+            ) : (
+              "Tarik Donasi"
+            )}
+          </button>
         ) : (
           <button
             onClick={() => {
