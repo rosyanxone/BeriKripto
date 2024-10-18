@@ -33,7 +33,7 @@ export default function ProgramProgress({
           <h2 className="font-lexend-deca font-medium">Lacak Donasi</h2>
           <a
             className="text-sm underline"
-            href={`https://optimism-sepolia.blockscout.com/address/${recipient}`}
+            href={`https://eth-sepolia.blockscout.com/address/${recipient}`}
             target="_blank"
           >
             {"blockscout.com/" + getShorterAddress(recipient)}

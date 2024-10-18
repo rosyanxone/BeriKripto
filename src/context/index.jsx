@@ -31,8 +31,8 @@ export function StateContextProvider({ children }) {
   // Connect to contract
   const contract = getContract({
     client,
-    chain: defineChain(11155420),
-    address: "0x26995044946B064436135b07c048b7c4d28c9fbe",
+    chain: defineChain(11155111),
+    address: "0x6E7E00C08947763F92FBac0B42d1edAAeDf24Caa",
   });
 
   // Connect user wallet

@@ -1,8 +1,16 @@
-import { getShorterAddress, convertUnixTimestamp, getFormattedEther } from "../../utils/index";
+import {
+  getShorterAddress,
+  convertUnixTimestamp,
+  getFormattedEther,
+} from "../../utils/index";
 
 import { useEffect } from "react";
 
-export default function Donors({ donations, openDonorsModal, setOpenDonorsModal }) {
+export default function Donors({
+  donations,
+  openDonorsModal,
+  setOpenDonorsModal,
+}) {
   useEffect(() => {
     if (openDonorsModal) {
       document.body.addEventListener("click", (e) => {
@@ -50,11 +58,14 @@ export default function Donors({ donations, openDonorsModal, setOpenDonorsModal 
                 <tr key={i}>
                   <td>{++i}</td>
                   <td>{getShorterAddress(donation.donator)}</td>
-                  <td>{convertUnixTimestamp(String(donation.createdAt), true)}</td>
-                  <td>{getFormattedEther(donation.amount)} ETH</td>
                   <td>
-                    {donation.message.substring(0, 22)}
-                    {donation.message.length > 22 && "..."}
+                    {convertUnixTimestamp(String(donation.createdAt), true)}
+                  </td>
+                  <td>{getFormattedEther(donation.amount)} ETH</td>
+                  <td className="!px-0">
+                    <span className="mx-2 block max-w-52 overflow-x-auto text-nowrap">
+                      <p>{donation.message}</p>
+                    </span>
                   </td>
                 </tr>
               ))}

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toWei } from "thirdweb";
+import { useActiveWalletConnectionStatus, useConnect } from "thirdweb/react";
 
 import { useStateContext } from "../../context";
 import SuccessModal from "./Success";
 import AnimateLoading from "../AnimateLoading";
+import { createWallet } from "thirdweb/wallets";
 
 export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const { id } = useParams();
@@ -16,12 +18,16 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const {
+    client,
     transactionFeedback,
     donateToProgram,
     isPending,
     isError,
     isSuccess,
   } = useStateContext();
+
+  const { connect } = useConnect();
+  const connectionStatus = useActiveWalletConnectionStatus();
 
   useEffect(() => {
     if (openDonationModal) {
@@ -41,14 +47,16 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
     if (isError) {
       setTransactionLoading(false);
 
-      if (transactionFeedback.error.code === 3) {
-        setErrorMessage("Saldo pengguna tidak mencukupi!");
-      } else if (transactionFeedback.error.code === 4001) {
-        setErrorMessage("Pengguna menolak melanjutkan transaksi!");
-      } else if (transactionFeedback.error.name === "TransactionError") {
-        setErrorMessage("Pemberian donasi harus lebih dari 0!");
-      } else {
-        setErrorMessage(transactionFeedback.error.message);
+      if (transactionFeedback.error) {
+        if (transactionFeedback.error.code === 3) {
+          setErrorMessage("Saldo pengguna tidak mencukupi!");
+        } else if (transactionFeedback.error.code === 4001) {
+          setErrorMessage("Pengguna menolak melanjutkan transaksi!");
+        } else if (transactionFeedback.error.name === "TransactionError") {
+          setErrorMessage("Pemberian donasi harus lebih dari 0!");
+        } else {
+          setErrorMessage(transactionFeedback.error.message);
+        }
       }
     }
 
@@ -60,11 +68,33 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    donateToProgram({
-      _id: id,
-      _message: message,
-      _amountDonation: toWei(amountDonation),
-    });
+    if (connectionStatus === "disconnected") {
+      connect(async () => {
+        const metamask = createWallet("io.metamask");
+
+        await metamask.connect({ client });
+
+        return metamask;
+      });
+    } else {
+      donateToProgram({
+        _id: id,
+        _message: message,
+        _amountDonation: toWei(amountDonation),
+      });
+    }
+  };
+  
+  const onDonationChangeHandler = (e) => {
+    setErrorMessage("");
+
+    if (e.target.value < 0) {
+      setErrorMessage("Target donasi tidak dapat kurang dari 0!");
+
+      return false;
+    }
+
+    setAmountDonation(e.target.value);
   };
 
   return (
@@ -110,11 +140,7 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   type="number"
                   inputMode="text"
                   id="donation"
-                  onChange={(e) =>
-                    e.target.value < 0
-                      ? false
-                      : setAmountDonation(e.target.value)
-                  }
+                  onChange={(e) => onDonationChangeHandler(e)}
                   value={amountDonation}
                   required
                 />
