@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "config": "hostile set localhost local.berikripto.me"
+    "config": "hostile set localhost local.berikripto.me",
+    "hostile": "hostile list"
   },
   "dependencies": {
     "@ethereumjs/wallet": "^2.0.4",
