@@ -33,52 +33,51 @@ export default function HomePage() {
   return (
     <section className="container-wraper" id="programs">
       <div className="wraper flex flex-col gap-12">
-        <div className="">
-          <p className="text-xl font-medium">Semua Program ({totalPrograms})</p>
-          <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
-            {!loading ? (
-              programs.map((program, i) => {
-                if (!account || program.owner != account.address) {
-                  return (
-                    <ProgramCard
-                      key={i}
-                      {...program}
-                      id={Math.abs(i - (programsRaw.length - 1))}
-                    />
-                  );
-                }
-              })
-            ) : (
-              <AnimateLoading />
-            )}
-          </div>
-        </div>
         {!loading ? (
-          <div className="">
-            {totalPrograms != programsRaw.length && (
-              <>
-                <p className="text-xl font-medium">
-                  Program Saya ({programsRaw.length - totalPrograms})
-                </p>
-                <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
-                  {programs.map((program, i) => {
-                    if (account && program.owner === account.address) {
-                      return (
-                        <ProgramCard
-                          key={i}
-                          {...program}
-                          id={Math.abs(i - (programsRaw.length - 1))}
-                        />
-                      );
-                    }
-                  })}
-                </div>
-              </>
-            )}
-          </div>
+          <>
+            <div className="">
+              <p className="text-xl font-medium">
+                Semua Program ({totalPrograms})
+              </p>
+              <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
+                {programs.map((program, i) => {
+                  if (!account || program.owner != account.address) {
+                    return (
+                      <ProgramCard
+                        key={i}
+                        {...program}
+                        id={Math.abs(i - (programsRaw.length - 1))}
+                      />
+                    );
+                  }
+                })}
+              </div>
+            </div>
+            <div className="">
+              {totalPrograms != programsRaw.length && (
+                <>
+                  <p className="text-xl font-medium">
+                    Program Saya ({programsRaw.length - totalPrograms})
+                  </p>
+                  <div className="grid grid-cols-3 justify-between gap-y-8 py-4">
+                    {programs.map((program, i) => {
+                      if (account && program.owner === account.address) {
+                        return (
+                          <ProgramCard
+                            key={i}
+                            {...program}
+                            id={Math.abs(i - (programsRaw.length - 1))}
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          </>
         ) : (
           <div className="">
-            <p className="mb-4 text-xl font-medium">Program Saya (0)</p>
             <AnimateLoading />
           </div>
         )}
