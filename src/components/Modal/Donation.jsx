@@ -12,7 +12,6 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
   const { id } = useParams();
 
   const [amountDonation, setAmountDonation] = useState("");
-  const [message, setMessage] = useState("");
   const [transactionLoading, setTransactionLoading] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -79,7 +78,6 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
     } else {
       donateToProgram({
         _id: id,
-        _message: message,
         _amountDonation: toWei(amountDonation),
       });
     }
@@ -144,19 +142,6 @@ export default function Donation({ openDonationModal, setOpenDonationModal }) {
                   value={amountDonation}
                   required
                 />
-              </label>
-              <label
-                htmlFor="message"
-                className="flex flex-col gap-1 font-lexend-deca font-medium"
-              >
-                Berikan Pesan Anda
-                <textarea
-                  id="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="max-h-44 w-86 rounded-md bg-gray-200 p-2"
-                  required
-                ></textarea>
               </label>
               <button
                 type="submit"

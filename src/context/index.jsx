@@ -31,8 +31,8 @@ export function StateContextProvider({ children }) {
   // Connect to contract
   const contract = getContract({
     client,
-    chain: defineChain(11155111),
-    address: "0x6E7E00C08947763F92FBac0B42d1edAAeDf24Caa",
+    chain: defineChain(11155420),
+    address: "0xA16817f7cdf8aFe8805fc12cB24457E35913081e",
   });
 
   // Connect user wallet
@@ -99,11 +99,11 @@ export function StateContextProvider({ children }) {
     });
   };
 
-  const donateToProgram = ({ _id, _message, _amountDonation }) => {
+  const donateToProgram = ({ _id, _amountDonation }) => {
     const transaction = prepareContractCall({
       contract,
-      method: "function donateToProgram(uint256 _id, string _message) payable",
-      params: [_id, _message],
+      method: "function donateToProgram(uint256 _id) payable",
+      params: [_id],
       value: _amountDonation,
     });
 
@@ -123,7 +123,7 @@ export function StateContextProvider({ children }) {
     let { data, isLoading } = useReadContract({
       contract,
       method:
-        "function getPrograms() view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, string message, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt)[])",
+        "function getPrograms() view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt)[])",
       params: [],
     });
 
@@ -145,7 +145,7 @@ export function StateContextProvider({ children }) {
     let { data, isLoading } = useReadContract({
       contract,
       method:
-        "function getProgram(uint256 _id) view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, string message, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt))",
+        "function getProgram(uint256 _id) view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt))",
       params: [_id],
     });
 
@@ -168,17 +168,6 @@ export function StateContextProvider({ children }) {
     }
 
     return { program: data, isLoading };
-  };
-
-  const getDonators = (_id) => {
-    const { data, isLoading } = useReadContract({
-      contract,
-      method:
-        "function getDonators(uint256 _id) view returns ((address donator, uint256 amount, string message, uint256 createdAt)[])",
-      params: [_id],
-    });
-
-    return { donators: data, isLoading };
   };
 
   const getDonation = (_id) => {

@@ -50,23 +50,17 @@ export default function Donors({
                 <th>Donatur</th>
                 <th>Waktu</th>
                 <th>Donasi</th>
-                <th>Pesan</th>
               </tr>
             </thead>
             <tbody>
               {donations.map((donation, i) => (
                 <tr key={i}>
                   <td>{++i}</td>
-                  <td>{getShorterAddress(donation.donator)}</td>
+                  <td>{donation.donator}</td>
                   <td>
                     {convertUnixTimestamp(String(donation.createdAt), true)}
                   </td>
                   <td>{getFormattedEther(donation.amount)} ETH</td>
-                  <td className="!px-0">
-                    <span className="mx-2 block max-w-52 overflow-x-auto text-nowrap">
-                      <p>{donation.message}</p>
-                    </span>
-                  </td>
                 </tr>
               ))}
             </tbody>

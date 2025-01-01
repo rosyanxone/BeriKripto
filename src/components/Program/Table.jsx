@@ -45,7 +45,6 @@ export default function ProgramTable({
                   <th>Donatur</th>
                   <th>Waktu</th>
                   <th>Donasi</th>
-                  <th>Pesan</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,10 +54,6 @@ export default function ProgramTable({
                     <td>{getShorterAddress(donation.donator)}</td>
                     <td>{convertUnixTimestamp(donation.createdAt, true)}</td>
                     <td>{getFormattedEther(donation.amount)} ETH</td>
-                    <td>
-                      {donation.message.substring(0, 22)}
-                      {donation.message.length > 22 && "..."}
-                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -83,7 +78,6 @@ export default function ProgramTable({
                   <th>Donatur</th>
                   <th>Waktu</th>
                   <th>Donasi</th>
-                  <th>Pesan</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,10 +89,6 @@ export default function ProgramTable({
                       {convertUnixTimestamp(String(donation.createdAt), false)}
                     </td>
                     <td>{getFormattedEther(donation.amount)} ETH</td>
-                    <td>
-                      {donation.message.substring(0, 22)}
-                      {donation.message.length > 22 && "..."}
-                    </td>
                   </tr>
                 ))}
               </tbody>
