@@ -31,8 +31,8 @@ export function StateContextProvider({ children }) {
   // Connect to contract
   const contract = getContract({
     client,
-    chain: defineChain(11155420),
-    address: "0xA16817f7cdf8aFe8805fc12cB24457E35913081e",
+    chain: defineChain(11155111),
+    address: "0xa1FFDa570C171B4dCC47D8548BB4E34fA501c1CA",
   });
 
   // Connect user wallet
@@ -102,8 +102,9 @@ export function StateContextProvider({ children }) {
   const donateToProgram = ({ _id, _amountDonation }) => {
     const transaction = prepareContractCall({
       contract,
-      method: "function donateToProgram(uint256 _id) payable",
-      params: [_id],
+      method: 
+      "function donateToProgram(uint256 _id, string _message) payable",
+    params: [_id, "_message"],
       value: _amountDonation,
     });
 
@@ -145,7 +146,7 @@ export function StateContextProvider({ children }) {
     let { data, isLoading } = useReadContract({
       contract,
       method:
-        "function getProgram(uint256 _id) view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt))",
+        "function getProgram(uint256 _id) view returns ((address owner, address recipient, string title, string description, uint256 deadline, uint256 target, uint256 amountCollected, string image, bool isFinish, (address donator, uint256 amount, string message, uint256 createdAt)[] donations, (string title, string story, string image, uint256 createdAt) report, uint256 createdAt))",
       params: [_id],
     });
 

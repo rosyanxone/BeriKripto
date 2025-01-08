@@ -94,23 +94,33 @@ export default function ProgramContent({
           >
             Laporan Penyaluran
           </button>
-        ) : (getFormattedEther(program.amountCollected) >=
+        ) : getFormattedEther(program.amountCollected) >=
             getFormattedEther(program.target) ||
-            dateTimeNow >= program.deadline) &&
+          dateTimeNow >= program.deadline ? (
           isOwner ? (
-          <button
-            onClick={() => getDonation(id)}
-            className="inline-flex justify-center gap-3 rounded-lg bg-dark p-6 text-xl font-semibold text-white"
-          >
-            {isPending ? (
-              <>
-                <AnimateLoading color="white" mr="0" size="6" />
-                Menarik Donasi ...
-              </>
-            ) : (
-              "Tarik Donasi"
-            )}
-          </button>
+            <button
+              onClick={() => getDonation(id)}
+              className="inline-flex justify-center gap-3 rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+            >
+              {isPending ? (
+                <>
+                  <AnimateLoading color="white" mr="0" size="6" />
+                  Menarik Donasi ...
+                </>
+              ) : (
+                "Tarik Donasi"
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setOpenReportModal(true);
+              }}
+              className="rounded-lg bg-dark p-6 text-xl font-semibold text-white"
+            >
+              Laporan Penyaluran
+            </button>
+          )
         ) : (
           <button
             onClick={() => {

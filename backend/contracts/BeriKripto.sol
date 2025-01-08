@@ -5,7 +5,6 @@ contract BeriKripto {
     struct Donation {
         address donator;
         uint amount;
-        string message;
         uint createdAt;
     }
 
@@ -64,14 +63,15 @@ contract BeriKripto {
         totalPrograms++;
     }
 
-    function donateToProgram(uint _id, string memory _message)
+    function donateToProgram(uint _id)
         public
         payable
     {
         Program storage program = programs[_id];
 
-        require(!program.isFinish, "The program has ended.");
         require(program.deadline > 0, "The program does not exist.");
+        require(!program.isFinish, "The program has ended.");
+        require(program.deadline > block.timestamp, "Program has reached its deadline.");
 
         uint amountDonation = msg.value;
 
@@ -80,7 +80,6 @@ contract BeriKripto {
         Donation memory newDonation = Donation(
             msg.sender,
             amountDonation,
-            _message,
             block.timestamp
         );
 
@@ -127,7 +126,7 @@ contract BeriKripto {
         require(
             program.amountCollected >= program.target ||
                 program.deadline < block.timestamp,
-            "The program has not reached its deadline."
+            "The program has not reached its deadline or target."
         );
 
         (bool sent, ) = payable(program.recipient).call{
@@ -167,16 +166,5 @@ contract BeriKripto {
         require(report.createdAt > 0, "The report does not exist.");
 
         return report;
-    }
-
-    // testing purpose
-    function withdrawToken(uint _id) public {
-        Program storage program = programs[_id];
-        (bool sent, ) = payable(program.recipient).call{
-            value: program.amountCollected
-        }("");
-        if (sent) {
-            program.isFinish = true;
-        }
     }
 }
